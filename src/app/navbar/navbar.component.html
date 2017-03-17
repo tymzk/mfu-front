@@ -1,0 +1,19 @@
+<nav>
+	<a *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a>
+	<a *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">Subjects</a>
+	<a *ngIf="administrator" [routerLinkActive]="['active']" [routerLink]="['/admin']">Admin</a>
+	<button *ngIf="!authenticated" (click)="doLogin()" href="#">Login</button>
+	<button *ngIf="authenticated" (click)="doLogout()" href="#">Logout</button>
+	{{userName}}
+	{{userId}}
+</nav>
+
+<div *ngIf="administrator">
+	<nav>
+		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">admin Home</a>
+		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">講義作成</a>
+		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">講義編集</a>
+		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject/assginment']">課題作成</a>
+	</nav>
+</div>
+

@@ -1,0 +1,26 @@
+
+<ul class="subjects">
+  <li *ngFor="let subject of subjects" (click)="onSelectSubject(subject)"
+    [class.selected]="subject === selectedSubject">
+    <span>{{subject.name}}</span>
+  </li>
+</ul>
+
+<div *ngIf="selectedSubject">
+  <h2> {{selectedSubject.name}} </h2>
+  <li *ngFor="let assignment of assignments" (click)="onSelectAssignment(assignment)"
+    [class.selected]="assignment === selectedAssignment">
+    <span>{{assignment.name}}</span>
+  </li>
+  <div *ngIf="selectedAssignment">
+    <h2> {{selectedAssignment.name}} </h2>
+    <li *ngFor="let submissionItem of submissionItems">
+      <span>FORM TEST</span>
+    </li>
+  </div>
+</div>
+
+<input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />
+<button type="button" class="btn btn-success btn-s"
+(click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+<span class="glyphicon glyphicon-upload"></span> Upload all

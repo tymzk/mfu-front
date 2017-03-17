@@ -1,0 +1,125 @@
+<div class="container">
+  <h4>ガチの管理者</h4>
+  <ul class="admins">
+    <li *ngFor="let admin of admins; let i=index">
+      <span>{{admin.id}}</span>
+      <span *ngIf="i > 0">
+        <a (click)="removeAdmin(admin.id)">削除(osuna)</a>
+      </span>
+    </li>
+  </ul>
+</div>
+
+<div>
+  <form>
+    <label>ID</label>
+    <input text="text" name="id" ngModel>
+    <button (click)="addAdmin(id)">管理者を追加</button>
+  </form>
+</div>
+
+
+<div class="container">
+  <h4>俺の講義</h4>
+  <ul class="subjects">
+    <li *ngFor="let subject of subjects" (click)="onSelectSubject(subject)"
+      [class.selected]="subject === selectedSubject">
+      <span>{{subject.name}}</span>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="selectedSubject">
+  <h2> {{selectedSubject.name}} </h2>
+  <li *ngFor="let assignment of assignments" (click)="onSelectAssignment(assignment)"
+    [class.selected]="assignment === selectedAssignment">
+    <span>{{assignment.name}}</span>
+  </li>
+</div>
+
+
+<div class="container">
+  <h4>講義を作成</h4>
+  <form [formGroup]="createSubjectForm" novalidate (ngSubmit)="createSubject(createSubjectForm.value)">
+    <div class="form-group">
+      <label>講義名:</label>
+      <input type="text" class="form-control" formControlName="name">
+    </div>
+
+    <div formArrayName="teachers">
+      <div *ngFor="let teacher of createSubjectForm.controls.teachers.controls; let i=index">
+        <div>
+          <span>address {{i + 1}}</span>
+          <span *ngIf="createSubjectForm.controls.teachers.controls.length > 1">
+            <a (click)="removeTeacher(i, createSubjectForm)">削除</a>
+          </span>
+        </div>
+        <div [formGroupName]="i">
+          <label>ID</label>
+          <input text="text" formControlName="id">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <a (click)="addTeacher(createSubjectForm)">担当教員を追加</a>
+    </div>
+
+    <div>
+      <button type="submit">更新</button>
+    </div>
+  </form>
+</div>
+
+<div><span>{{ createSubjectForm.value | json }}</span></div>
+
+<div class="container">
+  <h4>担当教員</h4>
+  <form [formGroup]="teachersForm" novalidate (ngSubmit)="saveTeachers(teachersForm)">
+    <div formArrayName="teachers">
+      <div *ngFor="let teacher of teachersForm.controls.teachers.controls; let i=index">
+        <div>
+          <span>address {{i + 1}}</span>
+          <span *ngIf="teachersForm.controls.teachers.controls.length > 1">
+            <a (click)="removeTeacher(i, teachersForm)">削除</a>
+          </span>
+        </div>
+        <div [formGroupName]="i">
+          <label>ID</label>
+          <input text="text" formControlName="id">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <a (click)="addTeacher(teachersForm)">担当教員を追加</a>
+    </div>
+
+    <div>
+      <button type="submit">更新</button>
+    </div>
+  </form>
+</div>
+
+<div class=container>
+  {{ teachersForm.value | json }}
+</div>
+
+
+<div>
+<form #createAssignmentForm="ngForm">
+  <label>課題名:</label>
+  <input type="text" name="name" ngModel>
+  <label>説明:</label>
+  <input type="text" name="description" ngModel>
+  <label>締切:</label>
+  <input type="text" name="deadline" ngModel>
+  <button type="submit" (click)="createSubject(createAssignmentForm.value)">作成</button>
+  <div>
+    <span>{{ createAssignmentForm.value | json }}</span>
+  </div>
+</form>
+</div>
+
+<button type="submit" (click)="getSubjects()">geT</button>
+<router-outlet></router-outlet>
