@@ -5,10 +5,12 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { PublicComponent } from './public/public.component';
 import { SubjectListComponent } from './subjectlist/subjectlist.component';
+
 import { AdminComponent } from './admin/admin.component';
+import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
+import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
 
 import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
-
 export const appRoutes: Routes = [
 	{
 		path: 'home',
@@ -17,7 +19,16 @@ export const appRoutes: Routes = [
 	},{
 		path: 'admin',
 		component: AdminComponent,
-		canActivate : [CanActivateViaOAuthGuard]
+		canActivate : [CanActivateViaOAuthGuard],
+		children: [{
+			path: 'admins',
+			component: AdminUpdateAdminComponent
+		},
+		{
+			path: 'subjects',
+			component: AdminUpdateSubjectComponent
+		}
+		]
 	},{
 		path: 'auth/callback',
 		component: AppComponent

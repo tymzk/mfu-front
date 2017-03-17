@@ -1,26 +1,66 @@
 
-<ul class="subjects">
-  <li *ngFor="let subject of subjects" (click)="onSelectSubject(subject)"
-    [class.selected]="subject === selectedSubject">
-    <span>{{subject.name}}</span>
-  </li>
-</ul>
+<md-card>
+
+  <md-card-title-group>
+    <md-card-title>履修科目</md-card-title>
+  </md-card-title-group>
+
+  <md-card-content>
+
+    <md-list dense class="subjects">
+      <md-list-item
+        *ngFor="let subject of subjects; let i=index"
+        [class.selected]="subject === selectedSubject">
+        <md-icon md-list-avatar (click)="onSelectSubject(subject)">school</md-icon>
+        <h4 md-line>課題名：{{subject.name}}</h4>
+        <button (click)="onSelectSubject(subject)" md-raised-button color="primary">詳細</button>
+      </md-list-item>
+    </md-list>
+
+  </md-card-content>
 
 <div *ngIf="selectedSubject">
-  <h2> {{selectedSubject.name}} </h2>
-  <li *ngFor="let assignment of assignments" (click)="onSelectAssignment(assignment)"
-    [class.selected]="assignment === selectedAssignment">
-    <span>{{assignment.name}}</span>
-  </li>
-  <div *ngIf="selectedAssignment">
-    <h2> {{selectedAssignment.name}} </h2>
-    <li *ngFor="let submissionItem of submissionItems">
-      <span>FORM TEST</span>
-    </li>
-  </div>
+
+  <md-divider></md-divider>
+
+  <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
+
+  <md-card-content>
+    <md-list dense class="assignments">
+      <md-list-item
+        *ngFor="let assignment of selectedSubject.assignments; let i=index"
+        [class.selected]="assignment === selectedAssignment">
+        <md-icon md-list-avatar (click)="onSelectAssignment(assignment)">folder</md-icon>
+        <h4 md-line>課題名：{{assignment.name}}</h4>
+        <p md-line>説明：{{assignment.description}}<p>
+        <p md-line>締切：{{assignment.deadline}}<p>
+        <button (click)="onSelectAssignment(assignment)" md-raised-button color="primary">詳細</button>
+      </md-list-item>
+    </md-list>
+
+    <div *ngIf="selectedSubject && selectedAssignment">
+
+      <md-divider></md-divider>
+      <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
+      <md-card-content>
+        <md-list dense class="assignmentItems">
+          <md-list-item
+            *ngFor="let assignmentItem of selectedAssignment.items"
+            (click)="onSelectAssignmentItem(assignmentItem)"
+            [class.selected]="assignmentItem === selectedAssignmentItem">
+            <md-icon md-list-avatar>note</md-icon>
+            <h4 md-line>{{assignmentItem.name}}</h4>
+            <p md-line> {{assignmentItem.description}} </p>
+            <input type="file" (change)="fileChangeEvent($event)" placeholder="upload"/>
+            <button type="button" (click)="upload()">提出</button>
+         </md-list-item>
+        </md-list>
+      </md-card-content>
+
+    </div>
+  </md-card-content>
+
 </div>
 
-<input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />
-<button type="button" class="btn btn-success btn-s"
-(click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-<span class="glyphicon glyphicon-upload"></span> Upload all
+</md-card>
+

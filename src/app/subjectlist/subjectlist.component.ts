@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploadModule } from 'primeng/primeng';
 import { Observable } from 'rxjs/Rx';
-import { FileUploader } from 'ng2-file-upload';
 
-import { Subject } from './subject';
-import { Assignment } from './assignment';
+import { Subject, Assignment, AssignmentItem } from '../models';
 
 import { Router} from '@angular/router';
 const URL = 'https://localhost:3001/upload';
 
 import { ApiService } from '../services/api.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-subject',
@@ -21,29 +20,89 @@ export class SubjectListComponent implements OnInit {
   subjects: Subject[];
   selectedSubject: Subject;
   selectedAssignment: Assignment;
+  selectedAssignmentItem: AssignmentItem;
+  filesToUpload: Array<File>;
+
+  upload() {
+    this.makeFileRequest('http://localhost:3001/upload',[],this.filesToUpload)
+      .then(
+        (result) => {
+          console.log("test")
+        }, (error) => {
+          console.log("error");
+        }
+    );
+  }
+
+  fileChangeEvent(fileInput: any){
+    this.filesToUpload = <Array<File>> fileInput.target.files;
+  }
+
+  makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+    return new Promise((resolve, reject) => {
+      var formData: any = new FormData();
+      var xhr = new XMLHttpRequest();
+      for(var i = 0; i < files.length; i++){
+        formData.append("uploads", files[i], files[i].name);
+      }
+
+      var jsondata = JSON.stringify({
+        userId: this.authService.getId(),
+        alias: this.selectedAssignmentItem.alias,
+        subjectName: this.selectedSubject.name,
+        subjectObjectId: this.selectedSubject._id,
+        assignmentName: this.selectedAssignment.name,
+        assignmentObjectId: this.selectedAssignment._id,
+        assignmentItemName: this.selectedAssignmentItem.name,
+        assignmentItemObjectId: this.selectedAssignmentItem._id
+      });
+
+      formData.append('data', jsondata);
+
+      xhr.upload.addEventListener("progress", (evt) => this.progressFunction(evt), false);
+
+      xhr.onreadystatechange = function () {
+        if(xhr.readyState == 4) {
+          if(xhr.status == 200){
+            resolve(JSON.parse(xhr.response));
+          }else{
+            reject(xhr.response);
+          }
+        }
+      }
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    })
+  }
+
+  progressFunction(evt){
+    if(evt.lengthComputable) {
+//      this.percent = Math.round(event.loaded / event.total * 100) + "%";
+      console.log(Math.round(evt.loaded / evt.total * 100) + "%");
+    }
+  }
+
+  uploadJsonData: String;
 
   constructor(
+    private authService: AuthService,
     private apiService: ApiService) {
+    this.filesToUpload = [];
 
   }
-  public uploader:FileUploader =
-    new FileUploader({url:'http://localhost:3001/upload'});
 
   ngOnInit() {
-    this.getSubjects();
+    this.getSubjects(this.authService.getId());
+    console.log(this.authService.getId());
+    console.log(this.subjects);
   }
 
 
-  getSubjects(): void {
-    console.log("testtestse");
-    this.apiService.getSubjects().then(subjects => this.subjects = subjects);
+  getSubjects(userId: String): void {
+    this.apiService.userGetSubjects(userId)
+      .then(subjects => this.subjects = subjects);
   }
 
-  add(name: string): void {
-  }
-
-  delete(subject: Subject): void {
-  }
 
   onSelectSubject(subject: Subject): void {
     this.selectedSubject = subject;
@@ -53,7 +112,12 @@ export class SubjectListComponent implements OnInit {
     this.selectedAssignment = assignment;
   }
 
-  gotoAssignments(): void {
-    //this.router.navigate(['/detail', this.selectedSubject.id]);
+  onSelectAssignmentItem(assignmentItem: AssignmentItem): void {
+    this.selectedAssignmentItem = assignmentItem;
   }
+
+  checkUploadedAssignmentItems(){
+
+  }
+
 }

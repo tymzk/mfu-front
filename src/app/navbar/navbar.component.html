@@ -1,19 +1,21 @@
-<nav>
-	<a *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a>
-	<a *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">Subjects</a>
-	<a *ngIf="administrator" [routerLinkActive]="['active']" [routerLink]="['/admin']">Admin</a>
-	<button *ngIf="!authenticated" (click)="doLogin()" href="#">Login</button>
-	<button *ngIf="authenticated" (click)="doLogout()" href="#">Logout</button>
-	{{userName}}
-	{{userId}}
-</nav>
+<md-toolbar color="accent">
+	<span>Minet File Uploader</span>
+	<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</button>
+	<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">Subjects</button>
+	<button md-button *ngIf="administrator" [routerLinkActive]="['active']" [routerLink]="['/admin']">Admin</button>
+	<button md-button color=’primary’ *ngIf="!authenticated" (click)="doLogin()" href="#">Login</button>
+	<button md-button color=’primary’ *ngIf="authenticated" (click)="doLogout()" href="#">Logout</button>
+</md-toolbar>
 
-<div *ngIf="administrator">
-	<nav>
-		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">admin Home</a>
-		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">講義作成</a>
-		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject']">講義編集</a>
-		<a [routerLinkActive]="['active']" [routerLink]="['/admin/subject/assginment']">課題作成</a>
-	</nav>
-</div>
-
+<md-toolbar *ngIf="administrator">
+		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/admins']">管理</button>
+		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/subjects']">講義</button>
+		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/subject/assginments']">課題</button>
+</md-toolbar>
+<!--
+	<md-card>
+		<md-radio-button name="symbol">春学期</md-radio-button>
+		<md-radio-button name="symbol">秋学期</md-radio-button>
+		<md-radio-button name="symbol" disabled>Gamma</md-radio-button>
+	</md-card>
+-->

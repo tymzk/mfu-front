@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { MaterialModule, MdInputModule } from '@angular/material';
 
 //import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 //import { InMemoryDataService }  from './in-memory-data.service';
@@ -26,6 +27,12 @@ import { ApiService } from './services/api.service';
 import { FileSelectDirective } from 'ng2-file-upload';
 import { SubjectComponent } from './subject/subject.component';
 
+import { ReplaceTextToJsonArray, InsertBreakLinePipe, TextToJsonArrayPipe, RemoveSpacePipe, RemoveBlankLinePipe, ReplaceBreakLineCodePipe } from './pipes/texttojsonarray.pipe';
+
+import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
+import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
+
+
 //,InMemoryWebApiModule.forRoot(InMemoryDataService)
 @NgModule({
   declarations: [
@@ -37,7 +44,14 @@ import { SubjectComponent } from './subject/subject.component';
     PublicComponent,
     FileSelectDirective,
     AdminComponent,
-    SubjectComponent
+    AdminUpdateAdminComponent,
+    AdminUpdateSubjectComponent,
+    SubjectComponent,
+    RemoveSpacePipe,
+    RemoveBlankLinePipe,
+    ReplaceBreakLineCodePipe,
+    InsertBreakLinePipe,
+    TextToJsonArrayPipe
   ],
   imports: [
     BrowserModule,
@@ -45,6 +59,8 @@ import { SubjectComponent } from './subject/subject.component';
     ReactiveFormsModule,
     HttpModule,
     ButtonModule,
+    MaterialModule,
+    MdInputModule,
     routing
   ],
   providers: [

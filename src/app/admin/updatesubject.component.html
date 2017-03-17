@@ -1,0 +1,196 @@
+<md-card>
+
+  <md-card-title-group>
+    <md-card-title>担当講義</md-card-title>
+  </md-card-title-group>
+
+  <md-card-content>
+
+    <md-list dense class="subjects">
+      <md-list-item *ngFor="let subject of subjects; let i=index"
+        [class.selected]="subject === selectedSubject">
+        <md-icon md-list-avatar>school</md-icon>
+        <h4 md-line>課題名：{{subject.name}}</h4>
+        <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
+        <button md-raised-button (click)="onSelectUpdateSubject(subject)" color="accent">修正</button>
+      </md-list-item>
+    </md-list>
+
+  </md-card-content>
+
+</md-card>
+
+<div><span>　</span></div>
+
+
+
+
+<md-card *ngIf="selectedSubject == undefined">
+  <md-card-title-group>
+    <md-card-title>講義を作成</md-card-title>
+  </md-card-title-group>
+
+  <md-card-content>
+    <div>
+      <form
+        novalidate
+        [formGroup]="createSubjectForm"
+        (ngSubmit)="createSubject(createSubjectForm.value)">
+
+        <div class="form-group">
+          <md-input-container class="md-block" flex-gt-sm>
+            <input mdInput placeholder="講義名" type="text" class="form-control" formControlName="name">
+          </md-input-container>
+        </div>
+
+        <div formArrayName="teachers">
+          <md-input-container class="md-block" flex-gt-sm>
+            <input mdInput placeholder="ID" type="text" class="form-control" [formControlName]="0">
+          </md-input-container>
+        </div>
+        <button md-raised-button color="primary" type="submit">追加</button>
+
+      </form>
+    </div>
+  </md-card-content>
+<div><span>{{ createSubjectForm.value | json }}</span></div>
+
+</md-card>
+
+<md-card *ngIf="selectedSubject">
+
+<!--  <md-divider></md-divider>-->
+  <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
+
+  <md-card-content>
+    <md-list dense class="assignments">
+      <md-list-item
+        *ngFor="let assignment of selectedSubject.assignments; let i=index"
+        [class.selected]="assignment === selectedAssignment">
+        <md-icon md-list-avatar>folder</md-icon>
+        <h4 md-line>課題名：{{assignment.name}}</h4>
+        <p md-line>説明：{{assignment.description}}<p>
+        <p md-line>締切：{{assignment.deadline}}<p>
+        <button (click)="onSelectAssignment(assignment)" md-raised-button color="primary">詳細</button>
+      </md-list-item>
+    </md-list>
+
+    <div *ngIf="selectedSubject && selectedAssignment">
+
+      <md-divider></md-divider>
+      <h3 md-subheader>課題「{{selectedAssignment.name}}」の詳細</h3>
+
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.name" placeholder="課題名" type="text">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.description" placeholder="説明" type="text">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.deadline" placeholder="締切" type="datetime-local">
+      </md-input-container>
+      <button md-raised-button color="primary" type="submit" (click)="updateAssignment()">課題を修正</button>
+
+      <div><span>{{ selectedAssignment | json }}</span></div>
+      <div><span>{{ selectedAssignment.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
+
+
+      <md-divider></md-divider>
+
+      <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
+
+      <md-card-content>
+        <md-list dense class="assignmentItems">
+          <md-list-item
+            *ngFor="let assignmentItem of selectedAssignment.items"
+            (click)="onSelectAssignmentItem(assignmentItem)"
+            [class.selected]="assignmentItem === selectedAssignmentItem">
+            <md-icon md-list-avatar>note</md-icon>
+            <h4 md-line>{{assignmentItem.name}}</h4>
+            <p md-line> {{assignmentItem.description}} </p>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+
+    </div>
+  </md-card-content>
+
+</md-card>
+
+<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+
+  <h3 md-subheader>{{selectedSubject.name}}の課題作成</h3>
+
+  <md-card-content>
+    <form #createAssignmentForm="ngForm">
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="課題名" type="text" name="name">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="説明" type="text" name="description">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="締切" type="datetime-local" name="deadline">
+      </md-input-container>
+      <button md-raised-button color="primary" type="submit" type="submit" (click)="createAssignment(selectedSubject._id, createAssignmentForm.value)">作成</button>
+    </form>
+    <div><span>{{ createAssignmentForm.value | json }}</span></div>
+    <div><span>{{ createAssignmentForm.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
+  </md-card-content>
+</md-card>
+
+<md-card *ngIf="selectedSubject && selectedAssignment">
+  <md-divider></md-divider>
+  <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム作成</h3>
+
+  <md-card-content>
+    <form #createAssignmentItemForm="ngForm">
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="提出フォーム名" type="text" name="name">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="説明" type="text" name="description">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="保存後のファイル名" type="text" name="alias">
+      </md-input-container>
+      <button md-raised-button color="primary" type="submit" (click)="createAssignmentItem(selectedSubject._id, selectedAssignment._id, createAssignmentItemForm.value)">作成</button>
+    </form>
+      <div><span>{{ createAssignmentItemForm.value | json }}</span></div>
+  </md-card-content>
+
+</md-card>
+
+
+<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+
+  <md-card-title-group>
+    <md-card-title>TA一覧</md-card-title>
+  </md-card-title-group>
+
+</md-card>
+
+<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+
+  <md-card-title-group>
+    <md-card-title>学生一覧</md-card-title>
+  </md-card-title-group>
+  <md-card-content>
+  <md-list dense class="students">
+    <md-list-item *ngFor="let student of selectedSubject.students; let i=index">
+       <md-icon> face </md-icon><span>{{student}}</span>
+    </md-list-item>
+  </md-list>
+  <div><textarea [(ngModel)]="studentList"></textarea></div>
+  <div>{{studentList | TextToJsonArrayPipe}}</div>
+  <button md-raised-button color="primary" type="submit"  (click)="updateStudentsOfSubject(selectedSubject._id)">送信</button>
+  </md-card-content>
+</md-card>
+
+
+
+
+<!--
+<div><span>{{ createAssignmentItemForm.value | json }}</span></div>
+-->
+<router-outlet></router-outlet>

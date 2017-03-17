@@ -1,10 +1,10 @@
 import {Injectable, EventEmitter} from "@angular/core";
-import {WindowService} from "./window.service";
+import { WindowService } from "./window.service";
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 
-import { Subject, Person } from '../subjectlist/subject';
+import { Subject, Person, Assignment, AssignmentItem } from '../models';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -14,16 +14,15 @@ import 'rxjs/add/operator/catch';
 export class ApiService {
   constructor (private http: Http) {}
   private apiUrl = 'http://localhost:3001/api';
-  private adminUrl = `${this.apiUrl}/admins`;
-  private adminIdsUrl = `${this.adminUrl}/ids`;
-  private adminSubjectsUrl = `${this.adminUrl}/subjects`;
+  private adminsUrl = `${this.apiUrl}/admins`;
+  private usersUrl = `${this.apiUrl}/users`
   private subjectsUrl = `${this.apiUrl}/subjects`;
 
   public getApi() : Observable<any> {
-  return this.http.get(this.apiUrl)
+  return this.http
+    .get(this.apiUrl)
     .map((res:Response) => res.json())
-    .catch((error:any) => Observable.throw
-      (error.json().error || 'Server error')
+    .catch((error:any) => Observable.throw(error.json().error || 'Server error')
     );
   }
 
@@ -32,92 +31,156 @@ export class ApiService {
   }
 
   private headers = new Headers({'Content-Type': 'application/json'});
+  private options = new RequestOptions({ headers: this.headers });
 
-/*
-  getSubjects(studentId: number): Promise<Subject[]> {
-    const url = `${this.subjectsUrl}/${studentId}`;
-
-    return this.http.get(this.subjectsUrl)
-      .toPromise()
-      .then(response => response.json().data as Subject[])
-      .catch(this.handleError);
-  }*/
-  createSubject(subject: any): Promise<Subject> {
-    return this.http
-      .post(this.subjectsUrl, subject, {headers: this.headers})
-      .toPromise()
-      .then(res => res.json().data)
-      .catch(this.handleError);
-  }
-  /*
-  getAdminMySubjects(id: String): void {
-    const url = `${this.adminSubjectsUrl}/${id}`;
-    console.log(url);
-    this.http.get(url)
-      .toPromise()
-      .then(response => {
-        console.log("test");
-        console.log(response.json());
-      })
-      .catch(this.handleError);
-  }
-*/
+  // GET /api/admins/ids
   getAdminIds(): Promise<Person[]>{
-    return this.http.get(this.adminIdsUrl)
+    const url = `${this.adminsUrl}/ids`;
+    return this.http
+      .get(url)
       .toPromise()
       .then(response => response.json() as Person[])
       .catch(this.handleError);
   }
-  getAdminMySubjects(id: String): Promise<Subject[]> {
-    const url = `${this.adminSubjectsUrl}/${id}`;
-    console.log(url);
-    return this.http.get(url)
+
+  addAdmin(userId: String) {
+    const url = `${this.adminsUrl}/${userId}`;
+    return this.http
+      .post(url, this.options)
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleError);
+  }
+
+  removeAdmin(userId: String) {
+    const url = `${this.adminsUrl}/${userId}`;
+    return this.http
+      .delete(url, this.options)
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleError);
+  }
+
+  // GET /api/admins/:id/subjects
+  getAdminMySubjects(userId: String): Promise<Subject[]> {
+    const url = `${this.adminsUrl}/${userId}/subjects/`;
+    return this.http
+      .get(url)
       .toPromise()
       .then(response => response.json() as Subject[])
       .catch(this.handleError);
   }
 
-  getMySubjects(id: String): Promise<Subject[]> {
-    const url = `${this.subjectsUrl}/${id}`;
-    return this.http.get(url)
-      .toPromise()
-      .then(response => response.json().data as Subject[])
-      .catch(this.handleError);
-  }
-
-  getSubjects(): Promise<Subject[]> {
-    return this.http.get(this.subjectsUrl)
-      .toPromise()
-      .then(response => response.json().data as Subject[])
-      .catch(this.handleError);
-  }
-
-/*
-  delete(id: number): Promise<void> {
-    const url = `${this.subjectsUrl}/${id}`;
-    return this.http.delete(url, {headers: this.headers})
+  // POST /api/subjects
+  createSubject(subject: Subject) {
+    const url = this.subjectsUrl;
+    var body = JSON.stringify(subject);
+    return this.http
+      .post(url, body, this.options)
       .toPromise()
       .then(() => null)
       .catch(this.handleError);
   }
 
-  create(name: string): Promise<Hero> {
+  updateSubject(subjectObjId: String, subject: Subject){
+    console.log("still in progress");
+  }
+
+  // GET /api/subjects/subjectObjId/students
+  getStudentsOfSubject(subjectObjId: String): Promise<Person[]>{
+    const url = `${this.subjectsUrl}/${subjectObjId}/students`;
     return this.http
-      .post(this.subjectsUrl, JSON.stringify({name: name}), {headers: this.headers})
+      .get(url)
       .toPromise()
-      .then(res => res.json().data)
+      .then(response => response.json() as Person[])
       .catch(this.handleError);
   }
 
-  update(hero: Hero): Promise<Hero> {
-    const url = `${this.subjectsUrl}/${hero.id}`;
-    return this.http
-      .put(url, JSON.stringify(hero), {headers: this.headers})
+  // PUT /api/subjects/:subjectObjId/students
+  updateStudentsOfSubject(subjectObjId: String, students: String) {
+    const url = `${this.subjectsUrl}/${subjectObjId}/students`;
+    var body = students;
+    return this.http.
+      put(url, body ,this.options)
       .toPromise()
-      .then(() => hero)
+      .then(() => null)
       .catch(this.handleError);
   }
-*/
+
+  // POST /api/subjects/:subjectObjId/teachers/:teacherId (no check)
+  addTeacherOfSubject(subjectObjId: String, teacherId: String): Promise<void> {
+    const url = `${this.subjectsUrl}/${subjectObjId}/teachers/${teacherId}`;
+    return this.http
+      .post(url, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
+
+  // PUT /api/subjects/:subjectObjId/assistants (no check)
+  addAssistantOfSubject(subjectObjId: String, assistantId: String) {
+    const url = `${this.subjectsUrl}/${subjectObjId}/assistants`;
+    return this.http
+      .post(url, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
+
+  // POST /api/subjects/:subjectObjId/assignments
+  createAssignment(subjectObjId: String, assignment: Assignment){
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments`;
+    var body = JSON.stringify(assignment)
+    return this.http
+      .post(url, body, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
+
+  // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId
+  updateAssignment(subjectObjId: String, assignmentObjId: String, assignment: Assignment): Promise<Assignment>{
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}`;
+    var body = JSON.stringify(assignment);
+    return this.http
+    .put(url, body, this.options)
+    .toPromise()
+    .then(response => response.json() as Assignment)
+    .catch(this.handleError);
+  }
+
+  // POST /api/subjects/:subjectObjId/assignments/:assignmentObjId/assignmentItems
+  createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems`;
+    var body = JSON.stringify(assignmentItem);
+    return this.http
+      .post(url, body, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
+
+  // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId/assignmentItems/:assignmentItemObjId/
+  updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItemObjId: String, assignmentItem: AssignmentItem){
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems/${assignmentItemObjId}`;
+    var body = JSON.stringify(assignmentItem);
+    return this.http
+      .put(url, body, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
+
+  // POST /api/users/:userId/subjects
+  userGetSubjects(id: String): Promise<Subject[]> {
+    const url = `${this.usersUrl}/${id}/subjects`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(response => response.json() as Subject[])
+      .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
