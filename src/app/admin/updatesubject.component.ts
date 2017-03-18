@@ -159,11 +159,11 @@ export class AdminUpdateSubjectComponent implements OnInit {
     this.apiService.createAssignment(subjectObjId, assignment);
   }
 
-  updateAssignment() {
+  updateAssignment(subjectObjId: String, assignment: Assignment) {
 // buttyake itii ni kimatteru kara iran
-    console.log(this.selectedSubject._id);
-    console.log(this.selectedAssignment._id);
-    this.apiService.updateAssignment(this.selectedSubject._id, this.selectedAssignment._id, this.selectedAssignment);
+    console.log(subjectObjId);
+    console.log(assignment._id);
+    this.apiService.updateAssignment(subjectObjId, assignment);
   }
 
   createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem) {
@@ -174,13 +174,12 @@ export class AdminUpdateSubjectComponent implements OnInit {
     this.apiService.createAssignmentItem(subjectObjId, assignmentObjId, assignmentItem);
   }
 
-  updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItemObjId: String, assignmentItem: AssignmentItem) {
+  updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem) {
 // buttyake itii ni kimatteru kara iran
     console.log(subjectObjId);
     console.log(assignmentObjId);
-    console.log(assignmentItemObjId);
     console.log(assignmentItem);
-    this.apiService.updateAssignmentItem(subjectObjId, assignmentObjId, assignmentItemObjId, assignmentItem);
+    this.apiService.updateAssignmentItem(subjectObjId, assignmentObjId, assignmentItem);
   }
 
 

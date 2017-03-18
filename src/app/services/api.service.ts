@@ -130,7 +130,7 @@ export class ApiService {
   // POST /api/subjects/:subjectObjId/assignments
   createAssignment(subjectObjId: String, assignment: Assignment){
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments`;
-    var body = JSON.stringify(assignment)
+    var body = JSON.stringify(assignment);
     return this.http
       .post(url, body, this.options)
       .toPromise()
@@ -139,8 +139,8 @@ export class ApiService {
   }
 
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId
-  updateAssignment(subjectObjId: String, assignmentObjId: String, assignment: Assignment): Promise<Assignment>{
-    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}`;
+  updateAssignment(subjectObjId: String, assignment: Assignment): Promise<Assignment>{
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignment._id}`;
     var body = JSON.stringify(assignment);
     return this.http
     .put(url, body, this.options)
@@ -161,8 +161,8 @@ export class ApiService {
   }
 
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId/assignmentItems/:assignmentItemObjId/
-  updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItemObjId: String, assignmentItem: AssignmentItem){
-    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems/${assignmentItemObjId}`;
+  updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems/${assignmentItem._id}`;
     var body = JSON.stringify(assignmentItem);
     return this.http
       .put(url, body, this.options)
