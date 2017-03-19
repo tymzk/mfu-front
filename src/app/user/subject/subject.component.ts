@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FileUploadModule } from 'primeng/primeng';
 import { Observable } from 'rxjs/Rx';
 
 import { Subject, Assignment, AssignmentItem } from '../../models';
