@@ -31,7 +31,7 @@ import { ReplaceTextToJsonArray, InsertBreakLinePipe, TextToJsonArrayPipe, Remov
 
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
 import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
-
+import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
 
 //,InMemoryWebApiModule.forRoot(InMemoryDataService)
 @NgModule({
@@ -51,7 +51,8 @@ import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
     RemoveBlankLinePipe,
     ReplaceBreakLineCodePipe,
     InsertBreakLinePipe,
-    TextToJsonArrayPipe
+    TextToJsonArrayPipe,
+    ConvertUtcToLocalTimePipe
   ],
   imports: [
     BrowserModule,

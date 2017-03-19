@@ -61,13 +61,33 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  private extractData(res: Response) {
+    var subjectList: Subject[];
+    let body = res.json();
+    subjectList = [];
+
+    for(var i = 0; i < body.length; i++){
+      console.log(body[i]);
+      subjectList.push(new Subject().deserialize(body[i]));
+    }
+
+    console.log(JSON.stringify(subjectList));
+    return subjectList;
+  }
+
   // GET /api/admins/:id/subjects
+  getAdminMySubjects(userId: string): Observable<Subject[]> {
+    const url = `${this.adminsUrl}/${userId}/subjects/`;
+    return this.http.get(url)
+      .map(response => this.extractData(response) as Subject[])
+      .catch(this.handleErrorObservable);
+  }
+/*
   getAdminMySubjects(userId: String): Promise<Subject[]> {
     const url = `${this.adminsUrl}/${userId}/subjects/`;
-    return this.http
-      .get(url)
+    return this.http.get(url)
       .toPromise()
-      .then(response => response.json() as Subject[])
+      .then(response => this.extractData(response) as Subject[])
       .catch(this.handleError);
   }
 
@@ -75,11 +95,24 @@ export class ApiService {
   createSubject(subject: Subject) {
     const url = this.subjectsUrl;
     var body = JSON.stringify(subject);
-    return this.http
-      .post(url, body, this.options)
+    return this.http.post(url, body, this.options)
       .toPromise()
       .then(() => null)
       .catch(this.handleError);
+  }
+*/
+  // POST /api/subjects
+  createSubject(subject: Subject): Observable<any>  {
+    const url = this.subjectsUrl;
+    var body = JSON.stringify(subject);
+    return this.http.post(url, body, this.options)
+      .map(response => null)
+      .catch(this.handleErrorObservable)
+      .finally(()=>{
+        // denjarasu
+        console.log("created");
+        this.getAdminMySubjects(subject.teachers[0]);
+      });
   }
 
   updateSubject(subjectObjId: String, subject: Subject){
@@ -131,6 +164,7 @@ export class ApiService {
   createAssignment(subjectObjId: String, assignment: Assignment){
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments`;
     var body = JSON.stringify(assignment);
+//    var body = new Assignment().serialize(assignment);
     return this.http
       .post(url, body, this.options)
       .toPromise()
@@ -149,9 +183,9 @@ export class ApiService {
     .catch(this.handleError);
   }
 
-  // POST /api/subjects/:subjectObjId/assignments/:assignmentObjId/assignmentItems
+  // POST /api/subjects/:subjectObjId/assignments/:assignmentObjId/items
   createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
-    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems`;
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/items`;
     var body = JSON.stringify(assignmentItem);
     return this.http
       .post(url, body, this.options)
@@ -160,9 +194,9 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId/assignmentItems/:assignmentItemObjId/
+  // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId/items/:assignmentItemObjId/
   updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
-    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/assignmentItems/${assignmentItem._id}`;
+    const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/items/${assignmentItem._id}`;
     var body = JSON.stringify(assignmentItem);
     return this.http
       .put(url, body, this.options)
@@ -179,6 +213,19 @@ export class ApiService {
       .toPromise()
       .then(response => response.json() as Subject[])
       .catch(this.handleError);
+  }
+
+  private handleErrorObservable (error: Response | any) {
+    let errMsg: string;
+    if(error instanceof Response){
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`
+    }else{
+      errMsg = error.message ? error.message : error.toString();
+    }
+    console.error(errMsg);
+    return Observable.throw(errMsg);
   }
 
   private handleError(error: any): Promise<any> {

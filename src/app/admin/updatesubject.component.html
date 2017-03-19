@@ -90,7 +90,6 @@
         <input mdInput [(ngModel)]="selectedAssignment.deadline" placeholder="締切" type="datetime-local">
       </md-input-container>
       <button md-raised-button color="primary" type="submit" (click)="updateAssignment(selectedSubject._id, selectedAssignment)">課題を修正</button>
-
       <div><span>{{ selectedAssignment | json }}</span></div>
       <div><span>{{ selectedAssignment.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
 

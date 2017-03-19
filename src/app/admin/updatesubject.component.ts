@@ -5,6 +5,7 @@ import { FileUploader } from 'ng2-file-upload';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Subject, Person, Assignment, AssignmentItem } from '../models';
 import { ReplaceTextToJsonArray, TextToJsonArrayPipe } from '../pipes/texttojsonarray.pipe';
+import { ConvertUtcToLocalTimePipe } from '../pipes/utctolocaltime.pipe';
 
 @Component({
   selector: 'app-admin-update-subject',
@@ -49,8 +50,8 @@ export class AdminUpdateSubjectComponent implements OnInit {
     this.id = this.authService.getId();
     this.getAdminMySubjectList(this.id);
     this.getTeacherList();
+    var initialDate = new Date(2000, 1,1 );
     console.log("get my subjects" + this.id + this.subjects);
-
     this.createSubjectForm = this.fb.group({
       name: ['', [
         Validators.required,
@@ -85,7 +86,7 @@ export class AdminUpdateSubjectComponent implements OnInit {
       ] ],
       description: ['', [
       ] ],
-      deadline: [new Date(2000, 1,1 ), [
+      deadline: [initialDate, [
       ] ]
     });
 
@@ -110,6 +111,8 @@ export class AdminUpdateSubjectComponent implements OnInit {
 
   onSelectSubject(subject: Subject): void {
     this.selectedSubject = subject;
+    console.log("sub" + this.selectedSubject);
+    console.log("assingments" + this.selectedSubject.assignments);
 		this.selectedUpdateSubject = null;
 		this.selectedAssignment = null;
 		this.selectedAssignmentItem = null;
@@ -140,12 +143,20 @@ export class AdminUpdateSubjectComponent implements OnInit {
 
   getAdminMySubjectList(id: string): void {
     console.log("get my subjects" + id + this.subjects);
-    this.apiService.getAdminMySubjects(id).then(subjects => this.subjects = subjects);
+    this.apiService.getAdminMySubjects(id).subscribe(
+      subjects => this.subjects = subjects,
+      error => this.subjects = <any>error);
+/*
+    this.apiService.getAdminMySubjects(id)
+      .then(subjects => { this.subjects = subjects } );*/
   }
 
   createSubject(subject: Subject) {
     console.log(subject);
-    this.apiService.createSubject(subject);
+//    this.apiService.createSubject(subject);
+    this.apiService.createSubject(subject).subscribe(
+      subjects => this.subjects = subjects,
+      error => this.subjects = <any>error);
   }
 
   updateSubject(subjectObjId: String, subject: Subject) {
@@ -164,6 +175,10 @@ export class AdminUpdateSubjectComponent implements OnInit {
     console.log(subjectObjId);
     console.log(assignment._id);
     this.apiService.updateAssignment(subjectObjId, assignment);
+  }
+
+  getTimezoneOffset(){
+    console.log(new Date().getTimezoneOffset());
   }
 
   createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem) {
