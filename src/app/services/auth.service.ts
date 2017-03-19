@@ -3,20 +3,6 @@ import {WindowService} from "./window.service";
 import {Http, Headers} from "@angular/http";
 import 'rxjs/add/operator/map';
 
-/*
-Object
-email:"mf12061@shibaura-it.ac.jp"
-family_name:"Taku"
-given_name:"Yamazaki"
-hd:"shibaura-it.ac.jp"
-id:"117590291618840080366"
-locale:"ja"
-name:"Yamazaki Taku"
-picture:"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"
-verified_email:true
-__proto__:Object
-*/
-
 @Injectable()
 export class AuthService {
   private oAuthCallbackUrl: string;
@@ -37,8 +23,6 @@ export class AuthService {
   private intervalLength = 100;
 
   private locationWatcher = new EventEmitter();
-
-//  userInfo$ = this.userInfo.asObservable();
 
   constructor(private windows: WindowService, private http: Http) {
     this.oAuthCallbackUrl = "http://localhost.co.jp:4200/auth/callback";

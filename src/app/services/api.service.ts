@@ -82,25 +82,7 @@ export class ApiService {
       .map(response => this.extractData(response) as Subject[])
       .catch(this.handleErrorObservable);
   }
-/*
-  getAdminMySubjects(userId: String): Promise<Subject[]> {
-    const url = `${this.adminsUrl}/${userId}/subjects/`;
-    return this.http.get(url)
-      .toPromise()
-      .then(response => this.extractData(response) as Subject[])
-      .catch(this.handleError);
-  }
 
-  // POST /api/subjects
-  createSubject(subject: Subject) {
-    const url = this.subjectsUrl;
-    var body = JSON.stringify(subject);
-    return this.http.post(url, body, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
-  }
-*/
   // POST /api/subjects
   createSubject(subject: Subject): Observable<any>  {
     const url = this.subjectsUrl;
@@ -109,9 +91,7 @@ export class ApiService {
       .map(response => null)
       .catch(this.handleErrorObservable)
       .finally(()=>{
-        // denjarasu
         console.log("created");
-        this.getAdminMySubjects(subject.teachers[0]);
       });
   }
 
@@ -149,7 +129,14 @@ export class ApiService {
       .then(() => null)
       .catch(this.handleError);
   }
-
+  removeTeacherOfSubject(subjectObjId: String, teacherId: String): Promise<void> {
+    const url = `${this.subjectsUrl}/${subjectObjId}/teachers/${teacherId}`;
+    return this.http
+      .delete(url, this.options)
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
+  }
   // PUT /api/subjects/:subjectObjId/assistants (no check)
   addAssistantOfSubject(subjectObjId: String, assistantId: String) {
     const url = `${this.subjectsUrl}/${subjectObjId}/assistants`;

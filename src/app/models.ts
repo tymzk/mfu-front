@@ -5,26 +5,13 @@ interface Serializable<T> {
 export class Subject implements Serializable<Subject> {
   _id: string;
   name: string;
+  public: boolean;
 	semester: string;
   teachers: string[];
 	assistants: string[];
   assignments: Assignment[];
   students: string[];
-	created: Date;
-/*
-  serialize(input){
-    this._id         = input._id;
-    this.name        = input.name;
-    this.semester    = input.semester;
-    this.teachers    = input.teachers;
-    this.assistants  = input.assistants;
-    this.students    = input.students;
-    this.created     = new Date(input.created.getTime() + (input.created.getTimezoneOffset()*60*1000));
-    this.assignments = [];
 
-    return JSON.stringify(this);
-  }
-*/
   deserialize(input): Subject{
     this._id         = input._id;
     this.name        = input.name;
@@ -32,7 +19,6 @@ export class Subject implements Serializable<Subject> {
     this.teachers    = input.teachers;
     this.assistants  = input.assistants;
     this.students    = input.students;
-    this.created     = new Date(input.created);
     this.assignments = [];
 
     for(var i = 0; i < input.assignments.length; i++){
@@ -46,37 +32,18 @@ export class Subject implements Serializable<Subject> {
 export class Assignment implements Serializable<Assignment> {
   _id: string;
   name: string;
-	private: Boolean;
+	public: boolean;
   deadline: Date;
 	description: string;
 	items: AssignmentItem[];
-	created: Date;
-/*
-  serialize(input: any){
-    this._id         = input._id;
-    this.name        = input.name;
-
-    this.private     = input.private;
-    this.description = input.description;
-    this.deadline    = new Date(input.deadline.getTime() + (input.deadline.getTimezoneOffset()*60*1000));
-    this.created     = new Date(input.created.getTime() + (input.created.getTimezoneOffset()*60*1000));
-    this.items       = [];
-
-    for(var i = 0; i < input.items.length; i++){
-      this.items.push(new AssignmentItem().serialize(input.items[i]));
-    }
-
-    return this;
-  }*/
 
   deserialize(input: any): Assignment{
     this._id         = input._id;
     this.name        = input.name;
 
-    this.private     = input.private;
+    this.public     = input.public;
     this.description = input.description;
     this.deadline    = new Date(input.deadline);
-    this.created     = new Date(input.created);
     this.items       = [];
 
     for(var i = 0; i < input.items.length; i++){
@@ -93,17 +60,7 @@ export class AssignmentItem implements Serializable<AssignmentItem> {
 	extensions: string[];
   alias: string;
 	description: string;
-/*
-  serialize(input: any){
-    this._id         = input._id;
-    this.name        = input.name;
-    this.extensions  = input.extensions;
-    this.alias       = input.alias;
-    this.description = input.description;
 
-    return this;
-  }
-*/
   deserialize(input){
     this._id         = input._id;
     this.name        = input.name;

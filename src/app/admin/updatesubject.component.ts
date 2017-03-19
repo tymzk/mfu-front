@@ -15,7 +15,7 @@ import { ConvertUtcToLocalTimePipe } from '../pipes/utctolocaltime.pipe';
 })
 export class AdminUpdateSubjectComponent implements OnInit {
 
-  addTeacherOfSubjectForm: FormGroup;
+  updateTeacherForm: FormGroup;
   createSubjectForm: FormGroup;
   assignmentForm: FormGroup;
 	assignmentItemForm: FormGroup;
@@ -41,21 +41,20 @@ export class AdminUpdateSubjectComponent implements OnInit {
   ) {
     console.log(this.authService.isAuthenticated());
   }
-  getTeacherList(): void{
-
-  }
 
   ngOnInit() {
     this.studentList = '';
     this.id = this.authService.getId();
     this.getAdminMySubjectList(this.id);
-    this.getTeacherList();
+
     var initialDate = new Date(2000, 1,1 );
-    console.log("get my subjects" + this.id + this.subjects);
+
     this.createSubjectForm = this.fb.group({
       name: ['', [
         Validators.required,
         Validators.minLength(2)
+      ] ],
+      public: [false, [
       ] ],
       teachers: this.fb.array([ [
         this.id,
@@ -65,15 +64,13 @@ export class AdminUpdateSubjectComponent implements OnInit {
       ] ]
     });
 
-    this.selectedTeachersForm = this.fb.group({
-      name: ['', [
+    this.updateTeacherForm = this.fb.group({
+      id : ['',
+        [
           Validators.required,
-          Validators.minLength(2)
-      ] ],
-      teachers: this.fb.array([
-        '',
-        Validators.required
-      ])
+          Validators.minLength(4)
+        ]
+      ]
     });
 
     this.assignmentForm = this.fb.group({
@@ -81,8 +78,7 @@ export class AdminUpdateSubjectComponent implements OnInit {
         Validators.required,
         Validators.minLength(2)
       ] ],
-      valid: [false, [
-
+      public: [false, [
       ] ],
       description: ['', [
       ] ],
@@ -90,29 +86,10 @@ export class AdminUpdateSubjectComponent implements OnInit {
       ] ]
     });
 
-    this.addTeacherOfSubjectForm = this.fb.group(
-      ['', [
-        Validators.required,
-        Validators.minLength(2)
-      ] ]
-    );
-
-    this.teachersForm = this.fb.group({
-      name: ['',
-        [Validators.required,
-        Validators.minLength(4)
-      ] ],
-      teachers: this.fb.array([
-        '',
-        Validators.required
-      ])
-    });
   }
 
   onSelectSubject(subject: Subject): void {
     this.selectedSubject = subject;
-    console.log("sub" + this.selectedSubject);
-    console.log("assingments" + this.selectedSubject.assignments);
 		this.selectedUpdateSubject = null;
 		this.selectedAssignment = null;
 		this.selectedAssignmentItem = null;
@@ -128,11 +105,6 @@ export class AdminUpdateSubjectComponent implements OnInit {
 		this.selectedAssignmentItem = assignmentItem;
 		this.selectedUpdateSubject = null;
   }
-  onSelectAssignmentDetails(assignment: Assignment){
-    this.selectedAssignmentDetails = assignment;
-		this.selectedAssignmentItem = null;
-		this.selectedUpdateSubject = null;
-  }
 
   onSelectUpdateSubject(subject: Subject): void{
     this.selectedSubject = subject;
@@ -142,107 +114,54 @@ export class AdminUpdateSubjectComponent implements OnInit {
   }
 
   getAdminMySubjectList(id: string): void {
-    console.log("get my subjects" + id + this.subjects);
     this.apiService.getAdminMySubjects(id).subscribe(
       subjects => this.subjects = subjects,
       error => this.subjects = <any>error);
-/*
-    this.apiService.getAdminMySubjects(id)
-      .then(subjects => { this.subjects = subjects } );*/
   }
 
   createSubject(subject: Subject) {
-    console.log(subject);
-//    this.apiService.createSubject(subject);
     this.apiService.createSubject(subject).subscribe(
       subjects => this.subjects = subjects,
       error => this.subjects = <any>error);
   }
 
   updateSubject(subjectObjId: String, subject: Subject) {
-    console.log("still in progress");
     this.apiService.updateSubject(subjectObjId, subject);
   }
 
   createAssignment(subjectObjId: String, assignment: Assignment) {
-    console.log(subjectObjId);
-    console.log(assignment);
     this.apiService.createAssignment(subjectObjId, assignment);
   }
 
   updateAssignment(subjectObjId: String, assignment: Assignment) {
-// buttyake itii ni kimatteru kara iran
-    console.log(subjectObjId);
-    console.log(assignment._id);
     this.apiService.updateAssignment(subjectObjId, assignment);
   }
 
-  getTimezoneOffset(){
-    console.log(new Date().getTimezoneOffset());
-  }
-
   createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem) {
-// buttyake itii ni kimatteru kara iran
-    console.log(subjectObjId);
-    console.log(assignmentObjId);
-    console.log(assignmentItem);
     this.apiService.createAssignmentItem(subjectObjId, assignmentObjId, assignmentItem);
   }
 
   updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem) {
-// buttyake itii ni kimatteru kara iran
-    console.log(subjectObjId);
-    console.log(assignmentObjId);
-    console.log(assignmentItem);
     this.apiService.updateAssignmentItem(subjectObjId, assignmentObjId, assignmentItem);
   }
 
-
-  getSubjects() {
-  }
-
-  saveTeachers(value: any){
-    console.log(value);
-  }
-
-  onClickTest(){
-    console.log("onClickTest");
-  }
-
-  initTeachers() {
-    return this.fb.group( [
-      '',
-      Validators.required,
-      Validators.minLength(2)
-    ] )
-  }
-
-
-
   addTeacher(subjectId: String, teacherId: String) {
-    console.log("teacher"+ teacherId);
-    console.log("subject"+ subjectId);
-    var jsontest = JSON.parse('{"_id":"' + subjectId +'", "id":"'+ teacherId +'"}');
-//    this.apiService.addTeacherOfSubject(jsontest).then(subjects => this.subjects = subjects);
-    console.log("still in progress");
+    this.apiService.addTeacherOfSubject(subjectId, teacherId);
   }
 
   removeTeacher(subjectId: String, teacherId: String) {
-    console.log("teacher"+ teacherId);
-    console.log("subject"+ subjectId);
+    this.apiService.removeTeacherOfSubject(subjectId, teacherId);
+  }
+
+  addAssistantsOfSubject(subjectId: String, assistantId: String): void {
     console.log("still in progress");
   }
 
-  updateTeachersOfSubject(subjectId: String): void {
-    console.log("still in progress");
-  }
-
-  updateAssistantsOfSubject(subjectId: String): void {
+  removeAssistantsOfSubject(subjectId: String, assistantId: String): void {
     console.log("still in progress");
   }
 
   updateStudentsOfSubject(subjectId: String): void {
-    console.log(subjectId + " : " + ReplaceTextToJsonArray(this.studentList));
     this.apiService.updateStudentsOfSubject(subjectId, ReplaceTextToJsonArray(this.studentList));
   }
 }

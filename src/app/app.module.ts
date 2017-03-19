@@ -31,6 +31,8 @@ import { ReplaceTextToJsonArray, InsertBreakLinePipe, TextToJsonArrayPipe, Remov
 
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
 import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
+//import { AdminSubjectManagementComponent } from './admin/subjectmanagement.component';
+
 import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
 
 //,InMemoryWebApiModule.forRoot(InMemoryDataService)

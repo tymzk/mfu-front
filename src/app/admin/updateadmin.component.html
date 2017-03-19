@@ -2,29 +2,27 @@
 
   <md-card-title-group>
     <md-card-title>ガチの管理者</md-card-title>
-    <md-card-subtitle>管理者追加用（チェックボックはデンジャラス）</md-card-subtitle>
+    <md-card-subtitle>管理者追加・削除用</md-card-subtitle>
   </md-card-title-group>
 
   <md-card-content>
 
     <md-list class="admins">
       <md-list-item *ngFor="let admin of admins; let i=index">
-        <md-checkbox ng-model="isChecked">
-          <md-icon> face </md-icon><span>{{admin.id}}</span>
-        </md-checkbox>
+        <md-icon> face </md-icon><span>{{admin.id}}</span>
       </md-list-item>
     </md-list>
   </md-card-content>
 
    <md-card-actions>
-      <form [formGroup]="addAdminForm" novalidate (ngSubmit)="addAdmin(addAdminForm.value)">
+      <form [formGroup]="addAdminForm" novalidate >
         <div class="form-group">
           <md-input-container>
             <input mdInput placeholder="管理者ID" type="text" class="form-control" formControlName="id">
             <span md-suffix>@shibaura-it.ac.jp</span>
           </md-input-container>
-          <button md-raised-button color="primary" type="submit">追加</button>
-          <button md-raised-button color="primary" type="submit">削除</button>
+          <button md-raised-button color="primary" type="submit" (click)="addAdmin(addAdminForm.value)">追加</button>
+          <button md-raised-button color="primary" type="submit" (click)="removeAdmin(addAdminForm.value)">削除</button>
         </div>
       </form>
    </md-card-actions>

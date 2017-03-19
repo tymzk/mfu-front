@@ -10,7 +10,8 @@
       <md-list-item *ngFor="let subject of subjects; let i=index"
         [class.selected]="subject === selectedSubject">
         <md-icon md-list-avatar>school</md-icon>
-        <h4 md-line>課題名：{{subject.name}}</h4>
+        <h4 md-line>{{subject.name}}</h4>
+        <md-checkbox [(ngModel)]="subject.private">公開</md-checkbox>
         <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
         <button md-raised-button (click)="onSelectUpdateSubject(subject)" color="accent">修正</button>
       </md-list-item>
@@ -21,9 +22,6 @@
 </md-card>
 
 <div><span>　</span></div>
-
-
-
 
 <md-card *ngIf="selectedSubject == undefined">
   <md-card-title-group>
@@ -137,7 +135,7 @@
 
 </md-card>
 
-<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+<md-card *ngIf="selectedSubject && selectedAssignment === null">
 
   <h3 md-subheader>{{selectedSubject.name}}の課題作成</h3>
 
@@ -181,7 +179,7 @@
 
 </md-card>
 
-<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+<md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>
     <md-card-title>TA一覧</md-card-title>
@@ -189,27 +187,50 @@
 
 </md-card>
 
-<md-card *ngIf="selectedSubject && selectedAssignment == undefined">
+<md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>
-    <md-card-title>学生一覧</md-card-title>
+    <md-card-title>担当教員一覧</md-card-title>
   </md-card-title-group>
   <md-card-content>
-  <md-list dense class="students">
-    <md-list-item *ngFor="let student of selectedSubject.students; let i=index">
-       <md-icon> face </md-icon><span>{{student}}</span>
-    </md-list-item>
-  </md-list>
-  <div><textarea [(ngModel)]="studentList"></textarea></div>
-  <div>{{studentList | TextToJsonArrayPipe}}</div>
-  <button md-raised-button color="primary" type="submit"  (click)="updateStudentsOfSubject(selectedSubject._id)">送信</button>
+
+    <md-list dense class="teachers">
+      <md-list-item *ngFor="let teacher of selectedSubject.teachers; let i=index">
+        <md-icon> face </md-icon><span>{{teacher}}</span>
+      </md-list-item>
+    </md-list>
+
+    <md-card-actions>
+      <form [formGroup]="updateTeacherForm" novalidate >
+        <div class="form-group">
+          <md-input-container>
+            <input mdInput placeholder="管理者ID" type="text" class="form-control" formControlName="id">
+            <span md-suffix>@shibaura-it.ac.jp</span>
+          </md-input-container>
+          <button md-raised-button color="primary" type="submit" (click)="addTeacher(selectedSubject._id, updateTeacherForm.value.id)">追加</button>
+          <button md-raised-button color="primary" type="submit" (click)="removeTeacher(selectedSubject._id, updateTeacherForm.value.id)">削除</button>
+        </div>
+      </form>
+    </md-card-actions>
+
   </md-card-content>
+
+
+  <md-card-title-group>
+    <md-card-title>受講学生一覧</md-card-title>
+  </md-card-title-group>
+
+  <md-card-content>
+    <md-list dense class="students">
+      <md-list-item *ngFor="let student of selectedSubject.students; let i=index">
+        <md-icon> face </md-icon><span>{{student}}</span>
+      </md-list-item>
+    </md-list>
+    <div><textarea [(ngModel)]="studentList"></textarea></div>
+    <div>{{studentList | TextToJsonArrayPipe}}</div>
+    <button md-raised-button color="primary" type="submit"  (click)="updateStudentsOfSubject(selectedSubject._id)">送信</button>
+  </md-card-content>
+
 </md-card>
 
-
-
-
-<!--
-<div><span>{{ createAssignmentItemForm.value | json }}</span></div>
--->
 <router-outlet></router-outlet>
