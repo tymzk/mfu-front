@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
-import { FileUploader } from 'ng2-file-upload';
+
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Subject, Person, Assignment, AssignmentItem } from '../models';
 import { ReplaceTextToJsonArray, TextToJsonArrayPipe } from '../pipes/texttojsonarray.pipe';
@@ -15,24 +15,19 @@ import { ConvertUtcToLocalTimePipe } from '../pipes/utctolocaltime.pipe';
 })
 export class AdminUpdateSubjectComponent implements OnInit {
 
+  private id: string;
+
   updateTeacherForm: FormGroup;
   createSubjectForm: FormGroup;
   assignmentForm: FormGroup;
 	assignmentItemForm: FormGroup;
-  teachersForm: FormGroup;
-  selectedTeachersForm: FormGroup;
-  private id: string;
+
   subjects: Subject[];
   teachers: Person[];
   selectedSubject: Subject;
-  selectedUpdateSubject: Subject;
 	selectedAssignment: Assignment;
 	selectedAssignmentItem: AssignmentItem;
-  selectedAssignmentDetails: Assignment;
   studentList: String;
-  logCurrentValue(){
-
-  }
 
   constructor(
     private authService: AuthService,
@@ -90,7 +85,6 @@ export class AdminUpdateSubjectComponent implements OnInit {
 
   onSelectSubject(subject: Subject): void {
     this.selectedSubject = subject;
-		this.selectedUpdateSubject = null;
 		this.selectedAssignment = null;
 		this.selectedAssignmentItem = null;
   }
@@ -98,17 +92,14 @@ export class AdminUpdateSubjectComponent implements OnInit {
   onSelectAssignment(assignment: Assignment): void {
 		this.selectedAssignment = assignment;
 		this.selectedAssignmentItem = null;
-		this.selectedUpdateSubject = null;
   }
 
   onSelectAssignmentItem(assignmentItem: AssignmentItem): void {
 		this.selectedAssignmentItem = assignmentItem;
-		this.selectedUpdateSubject = null;
   }
 
   onSelectUpdateSubject(subject: Subject): void{
     this.selectedSubject = subject;
-    this.selectedUpdateSubject = subject;
 		this.selectedAssignment = null;
 		this.selectedAssignmentItem = null;
   }

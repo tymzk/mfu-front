@@ -13,7 +13,6 @@
         <h4 md-line>{{subject.name}}</h4>
         <md-checkbox [(ngModel)]="subject.private">公開</md-checkbox>
         <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
-        <button md-raised-button (click)="onSelectUpdateSubject(subject)" color="accent">修正</button>
       </md-list-item>
     </md-list>
 
@@ -21,12 +20,9 @@
 
 </md-card>
 
-<div><span>　</span></div>
-
 <md-card *ngIf="selectedSubject == undefined">
-  <md-card-title-group>
-    <md-card-title>講義を作成</md-card-title>
-  </md-card-title-group>
+
+  <h3 md-subheader>講義を作成</h3>
 
   <md-card-content>
     <div>
@@ -51,6 +47,7 @@
       </form>
     </div>
   </md-card-content>
+
 <div><span>{{ createSubjectForm.value | json }}</span></div>
 
 </md-card>
@@ -90,7 +87,6 @@
       <button md-raised-button color="primary" type="submit" (click)="updateAssignment(selectedSubject._id, selectedAssignment)">課題を修正</button>
       <div><span>{{ selectedAssignment | json }}</span></div>
       <div><span>{{ selectedAssignment.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
-
 
       <md-divider></md-divider>
 
@@ -179,6 +175,7 @@
 
 </md-card>
 
+<!--
 <md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>
@@ -186,7 +183,7 @@
   </md-card-title-group>
 
 </md-card>
-
+-->
 <md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>

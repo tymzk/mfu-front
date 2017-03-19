@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
-import { FileUploader } from 'ng2-file-upload';
+
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ReplaceTextToJsonArray, TextToJsonArrayPipe } from '../pipes/texttojsonarray.pipe';
 

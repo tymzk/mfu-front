@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { PublicComponent } from './public/public.component';
-import { SubjectListComponent } from './subjectlist/subjectlist.component';
+import { UserSubjectComponent } from './user/subject/subject.component';
 
 import { AdminComponent } from './admin/admin.component';
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
@@ -14,10 +13,6 @@ import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
 import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 export const appRoutes: Routes = [
 	{
-		path: 'home',
-		component: HomeComponent,
-		canActivate : [CanActivateViaOAuthGuard]
-	},{
 		path: 'admin',
 		component: AdminComponent,
 		canActivate : [CanActivateViaOAuthGuard],
@@ -35,14 +30,11 @@ export const appRoutes: Routes = [
 		component: AppComponent
 	},{
 		path: 'subjects',
-		component: SubjectListComponent,
+		component: UserSubjectComponent,
 		canActivate : [CanActivateViaOAuthGuard]
 	},{
 		path: '',
 		component: HomeComponent,
-	},{
-		path: 'public',
-		component: PublicComponent
 	}
 ];
 

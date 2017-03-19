@@ -2,21 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FileUploadModule } from 'primeng/primeng';
 import { Observable } from 'rxjs/Rx';
 
-import { Subject, Assignment, AssignmentItem } from '../models';
+import { Subject, Assignment, AssignmentItem } from '../../models';
 
 import { Router} from '@angular/router';
-const URL = 'https://localhost:3001/upload';
 
-import { ApiService } from '../services/api.service';
-import { AuthService } from '../services/auth.service';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-subject',
-  templateUrl: './subjectlist.component.html',
-  styleUrls: ['./subjectlist.component.css'],
+  selector: 'app-user-subject',
+  templateUrl: './subject.component.html',
+  styleUrls: ['./subject.component.css'],
 	providers: [ ApiService ]
 })
-export class SubjectListComponent implements OnInit {
+export class UserSubjectComponent implements OnInit {
   subjects: Subject[];
   selectedSubject: Subject;
   selectedAssignment: Assignment;
