@@ -1,4 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
 /*@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';*/
 @import '~@angular/material/core/theming/prebuilt/indigo-pink.css';
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+body {
+	min-height: 100px;
+	padding-top: 40px;
+}
+
+.fill-remaining-space {
+	flex: 1 1 auto;
+}
+

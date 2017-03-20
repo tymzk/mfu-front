@@ -1,14 +1,36 @@
-<md-toolbar color="accent">
-	<span>Minet File Uploader</span>
-	<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</button>
-	<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">Subjects</button>
-	<button md-button *ngIf="administrator" [routerLinkActive]="['active']" [routerLink]="['/admin']">Admin</button>
-	<button md-button color=’primary’ *ngIf="!authenticated" (click)="doLogin()" href="#">Login</button>
-	<button md-button color=’primary’ *ngIf="authenticated" (click)="doLogout()" href="#">Logout</button>
-</md-toolbar>
+<header class="navbar navbar-default navbar-inverse navbar-fixed-top">
+	<div id="navbar" class="navbar-collapse collpase">
+		<span class="navbar-brand">Minet File Uploader</span>
+		<a class="navbar-brand" *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a>
+		<a class="navbar-brand" *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">講義</a>
+		<span class=" fill-remaining-space"></span>
+		<div *ngIf="administrator">
+			<span class="navbar-brand"> | admin: </span>
+			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/admins']">管理</a>
+			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/subjects']">講義</a>
+		</div>
+		<span class="navbar-brand">{{userName}}</span>
+		<a class="navbar-brand" *ngIf="!authenticated" (click)="doLogin()" href="#">Login</a>
+		<a class="navbar-brand" *ngIf="authenticated" (click)="doLogout()" href="#">Logout</a>
+	</div>
+</header>
 
+<!--
+<div layout="column" layout-fill>
+	<md-toolbar color="accent">
+		<span md-truncate flex>Minet File Uploader</span>
+
+		<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</button>
+		<button md-button *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">Subjects</button>
+		<button md-button *ngIf="administrator" [routerLinkActive]="['active']" [routerLink]="['/admin']">Admin</button>
+		<span class=" fill-remaining-space"></span>
+		<button md-button color=’primary’ *ngIf="!authenticated" (click)="doLogin()" href="#">Login</button>
+		<button md-button color=’primary’ *ngIf="authenticated" (click)="doLogout()" href="#">Logout</button>
+	</md-toolbar>
+</div>
 <md-toolbar *ngIf="administrator">
 		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/admins']">管理</button>
 		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/subjects']">講義</button>
 		<button md-button [routerLinkActive]="['active']" [routerLink]="['/admin/subject/assginments']">課題</button>
 </md-toolbar>
+-->
