@@ -1,29 +1,21 @@
-import { Component, Input, OnInit, Inject } from '@angular/core';
-import { ApiService } from '../services/api.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-
-import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
-import { ReplaceTextToJsonArray, TextToJsonArrayPipe } from '../pipes/texttojsonarray.pipe';
+import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
-  providers: [ ApiService ]
+  template: `<router-outlet></router-outlet>`,
+  providers: [ AdminService ]
 })
 export class AdminComponent implements OnInit {
 
-  private id: String;
-
   constructor(
     private authService: AuthService,
-    private apiService: ApiService,
-    private fb: FormBuilder
+    private adminService: AdminService
   ) {
     console.log(this.authService.isAuthenticated());
   }
 
   ngOnInit() {
-    this.id = this.authService.getId();
   }
 }

@@ -11,7 +11,6 @@
         [class.selected]="subject === selectedSubject">
         <md-icon md-list-avatar>school</md-icon>
         <h4 md-line>{{subject.name}}</h4>
-        <md-checkbox [(ngModel)]="subject.private">公開</md-checkbox>
         <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
       </md-list-item>
     </md-list>
@@ -22,7 +21,7 @@
 
 <md-card *ngIf="selectedSubject == undefined">
 
-  <h3 md-subheader>講義を作成</h3>
+  <h4 md-subheader>講義を作成</h4>
 
   <md-card-content>
     <div>
@@ -54,7 +53,6 @@
 
 <md-card *ngIf="selectedSubject">
 
-<!--  <md-divider></md-divider>-->
   <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
 
   <md-card-content>
@@ -65,12 +63,12 @@
         <md-icon md-list-avatar>folder</md-icon>
         <h4 md-line>課題名：{{assignment.name}}</h4>
         <p md-line>説明：{{assignment.description}}<p>
-        <p md-line>締切：{{assignment.deadline}}<p>
+        <p md-line>締切：{{assignment.deadline | date: "yyyy/MM/dd (EE) hh:mm"}}<p>
         <button (click)="onSelectAssignment(assignment)" md-raised-button color="primary">詳細</button>
       </md-list-item>
     </md-list>
 
-    <div *ngIf="selectedSubject && selectedAssignment">
+    <div *ngIf="selectedSubject && selectedAssignment && selectedAssignmentItem === null">
 
       <md-divider></md-divider>
       <h3 md-subheader>課題「{{selectedAssignment.name}}」の詳細</h3>
@@ -84,10 +82,14 @@
       <md-input-container class="md-block" flex-gt-sm>
         <input mdInput [(ngModel)]="selectedAssignment.deadline" placeholder="締切" type="datetime-local">
       </md-input-container>
+      <md-checkbox [(ngModel)]="selectedAssignment.public">
+        公開
+      </md-checkbox>
       <button md-raised-button color="primary" type="submit" (click)="updateAssignment(selectedSubject._id, selectedAssignment)">課題を修正</button>
+<!--
       <div><span>{{ selectedAssignment | json }}</span></div>
-      <div><span>{{ selectedAssignment.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
-
+      <div><span>{{ selectedAssignment.deadline |  date: "yyyy-MM-ddThh:mm"}}</span></div>
+-->
       <md-divider></md-divider>
 
       <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
@@ -121,8 +123,10 @@
       <md-input-container class="md-block" flex-gt-sm>
         <input mdInput [(ngModel)]="selectedAssignment.alias" placeholder="保存時のファイル名" type="text">
       </md-input-container>
-      <button md-raised-button color="primary" type="submit" (click)="updateAssignmentItem(selectedSubject._id, selectedAssignment._id, selectedAssignmentItem)">提出フォームを修正</button>
-
+      <button md-raised-button color="primary" type="submit"
+        (click)="updateAssignmentItem(selectedSubject._id, selectedAssignment._id, selectedAssignmentItem)">
+        提出フォームを修正
+      </button>
       <div><span>{{ selectedAssignmentItem | json }}</span></div>
 
     </div>
@@ -149,7 +153,7 @@
       <button md-raised-button color="primary" type="submit" type="submit" (click)="createAssignment(selectedSubject._id, createAssignmentForm.value)">作成</button>
     </form>
     <div><span>{{ createAssignmentForm.value | json }}</span></div>
-    <div><span>{{ createAssignmentForm.deadline | date: "EEEE, dd. MMMM yyyy"}}</span></div>
+    <div><span>{{ createAssignmentForm.deadline | date: "yyyy-MM-ddThh:mm"}}</span></div>
   </md-card-content>
 </md-card>
 

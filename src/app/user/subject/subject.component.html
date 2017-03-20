@@ -8,11 +8,15 @@
   <md-card-content>
 
     <md-list dense class="subjects">
+
+      <div *ngIf="(subjects | json) == '[]'" class="alert alert-warning" role="alert">
+        現在履修している科目はありません。
+      </div>
       <md-list-item
         *ngFor="let subject of subjects; let i=index"
         [class.selected]="subject === selectedSubject">
         <md-icon md-list-avatar (click)="onSelectSubject(subject)">school</md-icon>
-        <h4 md-line>課題名：{{subject.name}}</h4>
+        <h4 md-line>{{subject.name}}</h4>
         <button (click)="onSelectSubject(subject)" md-raised-button color="primary">詳細</button>
       </md-list-item>
     </md-list>
@@ -24,6 +28,10 @@
   <md-divider></md-divider>
 
   <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
+
+  <div *ngIf="(selectedSubject?.assignments | json) == '[]'" class="alert alert-warning" role="alert">
+    提出可能な課題はありません。
+  </div>
 
   <md-card-content>
     <md-list dense class="assignments">
@@ -40,12 +48,16 @@
 
     <div *ngIf="selectedSubject && selectedAssignment">
 
+      <div *ngIf="(selectedAssignment?.items | json) == '[]'" class="alert alert-warning" role="alert">
+        提出可能な課題はありません。
+      </div>
+
       <md-divider></md-divider>
       <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
       <md-card-content>
         <md-list dense class="assignmentItems">
           <md-list-item
-            *ngFor="let assignmentItem of selectedAssignment.items"
+            *ngFor="let assignmentItem of selectedAssignment?.items"
             (click)="onSelectAssignmentItem(assignmentItem)"
             [class.selected]="assignmentItem === selectedAssignmentItem">
             <md-icon md-list-avatar>note</md-icon>

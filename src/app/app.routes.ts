@@ -5,7 +5,9 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { UserSubjectComponent } from './user/subject/subject.component';
 
+import { AdminSubjectListComponent } from './admin/subject-list.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdminSubjectComponent } from './admin/subject.component';
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
 import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
 //import { AdminSubjectManagementComponent } from './admin/subjectmanagement.component';
@@ -16,13 +18,14 @@ export const appRoutes: Routes = [
 		path: 'admin',
 		component: AdminComponent,
 		canActivate : [CanActivateViaOAuthGuard],
-		children: [ {
+		children: [
+			{
 				path: 'admins',
 				component: AdminUpdateAdminComponent
 			},
 			{
 				path: 'subjects',
-				component: AdminUpdateSubjectComponent
+				component: AdminSubjectComponent
 			}
 		]
 	},{

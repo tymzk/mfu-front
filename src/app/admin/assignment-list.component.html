@@ -1,0 +1,43 @@
+<md-card *ngIf="selectedSubject">
+
+  <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
+
+  <md-card-content>
+    <md-list dense class="assignments">
+      <md-list-item
+        *ngFor="let assignment of selectedSubject.assignments; let i=index"
+        [class.selected]="assignment === selectedAssignment">
+        <md-icon md-list-avatar>folder</md-icon>
+        <h4 md-line>課題名：{{assignment.name}}</h4>
+        <p md-line>説明：{{assignment.description}}<p>
+        <p md-line>締切：{{assignment.deadline | date: "yyyy/MM/dd (EE) hh:mm"}}<p>
+        <button (click)="onSelectAssignment(assignment)" md-raised-button color="primary">詳細</button>
+      </md-list-item>
+    </md-list>
+
+    <div *ngIf="selectedSubject && selectedAssignment && selectedAssignmentItem === null">
+
+      <md-divider></md-divider>
+      <h3 md-subheader>課題「{{selectedAssignment.name}}」の詳細</h3>
+
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.name" placeholder="課題名" type="text">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.description" placeholder="説明" type="text">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput [(ngModel)]="selectedAssignment.deadline" placeholder="締切" type="datetime-local">
+      </md-input-container>
+      <md-checkbox [(ngModel)]="selectedAssignment.public">
+        公開
+      </md-checkbox>
+      <button md-raised-button color="primary" type="submit" (click)="updateAssignment(selectedSubject._id, selectedAssignment)">課題を修正</button>
+      <div><span>{{ selectedAssignment | json }}</span></div>
+      <div><span>{{ selectedAssignment.deadline |  date: "yyyy-MM-ddThh:mm"}}</span></div>
+
+    </div>
+
+  </md-card-content>
+
+</md-card>

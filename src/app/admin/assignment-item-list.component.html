@@ -1,0 +1,41 @@
+<md-card *ngIf="selectedAssignment">
+
+  <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
+
+  <md-card-content>
+    <md-list dense class="assignmentItems">
+      <md-list-item
+        *ngFor="let assignmentItem of selectedAssignment.items"
+        (click)="onSelectAssignmentItem(assignmentItem)"
+        [class.selected]="assignmentItem === selectedAssignmentItem">
+        <md-icon md-list-avatar>note</md-icon>
+        <h4 md-line>{{assignmentItem.name}}</h4>
+        <p md-line> {{assignmentItem.description}} </p>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+
+  <md-divider></md-divider>
+
+  <md-card-content *ngIf="selectedAssignmentItem">
+
+    <h3 md-subheader>{{selectedAssignmentItem.name}}の更新</h3>
+
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput [(ngModel)]="selectedAssignmentItem.name" placeholder="課題名" type="text">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput [(ngModel)]="selectedAssignmentItem.description" placeholder="説明" type="text">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput [(ngModel)]="selectedAssignment.alias" placeholder="保存時のファイル名" type="text">
+    </md-input-container>
+    <button md-raised-button color="primary" type="submit"
+      (click)="updateAssignmentItem(selectedSubject._id, selectedAssignment._id, selectedAssignmentItem)">
+      提出フォームを修正
+    </button>
+    <div><span>{{ selectedAssignmentItem | json }}</span></div>
+
+  </md-card-content>
+
+</md-card>

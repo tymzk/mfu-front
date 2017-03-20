@@ -1,0 +1,24 @@
+<md-card>
+
+  <md-card-title-group>
+    <md-card-title>担当講義</md-card-title>
+  </md-card-title-group>
+
+  <md-card-content>
+
+    <div *ngIf="(subjects | json) == '[]'" class="alert alert-warning" role="alert">
+      現在履修している科目はありません。
+    </div>
+
+    <md-list dense class="subjects">
+      <md-list-item *ngFor="let subject of subjects; let i=index"
+        [class.selected]="subject === selectedSubject">
+        <md-icon md-list-avatar> school </md-icon>
+        <h4 md-line>{{subject.name}}</h4>
+        <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
+      </md-list-item>
+    </md-list>
+
+  </md-card-content>
+
+</md-card>

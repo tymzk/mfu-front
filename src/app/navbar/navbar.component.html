@@ -9,7 +9,7 @@
 			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/admins']">管理</a>
 			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/subjects']">講義</a>
 		</div>
-		<span class="navbar-brand">{{userName}}</span>
+		<span class="navbar-brand">{{userId}}</span>
 		<a class="navbar-brand" *ngIf="!authenticated" (click)="doLogin()" href="#">Login</a>
 		<a class="navbar-brand" *ngIf="authenticated" (click)="doLogout()" href="#">Logout</a>
 	</div>

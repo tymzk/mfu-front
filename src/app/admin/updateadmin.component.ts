@@ -7,7 +7,6 @@ import { Subject, Person } from '../models';
 @Component({
   selector: 'app-admin-update-admin',
   templateUrl: './updateadmin.component.html',
-  styleUrls: ['./admin.component.css'],
   providers: [ ApiService ]
 })
 

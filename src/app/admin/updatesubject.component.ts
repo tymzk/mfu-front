@@ -10,7 +10,6 @@ import { ConvertUtcToLocalTimePipe } from '../pipes/utctolocaltime.pipe';
 @Component({
   selector: 'app-admin-update-subject',
   templateUrl: './updatesubject.component.html',
-  styleUrls: ['./admin.component.css'],
   providers: [ ApiService ]
 })
 export class AdminUpdateSubjectComponent implements OnInit {

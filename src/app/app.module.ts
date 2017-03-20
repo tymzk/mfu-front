@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule, MdInputModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+import { AlertModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -20,9 +23,14 @@ import { CanActivateViaOAuthGuard } from './oAuth.canActivateGuard';
 import { routing } from './app.routes';
 
 import { AdminComponent } from './admin/admin.component';
+import { AdminSubjectComponent } from './admin/subject.component';
+import { AdminSubjectFormComponent } from './admin/subject-form.component';
+import { AdminAssignmentListComponent } from './admin/assignment-list.component';
+import { AdminAssignmentItemListComponent } from './admin/assignment-item-list.component';
+
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
 import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
-//import { AdminSubjectManagementComponent } from './admin/subjectmanagement.component';
+import { AdminSubjectListComponent } from './admin/subject-list.component';
 
 import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
 
@@ -33,6 +41,11 @@ import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
     NavbarComponent,
     AdminComponent,
     AdminUpdateAdminComponent,
+    AdminSubjectComponent,
+    AdminSubjectListComponent,
+    AdminSubjectFormComponent,
+    AdminAssignmentListComponent,
+    AdminAssignmentItemListComponent,
     AdminUpdateSubjectComponent,
     UserSubjectComponent,
     RemoveSpacePipe,
@@ -48,6 +61,8 @@ import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
     ReactiveFormsModule,
     HttpModule,
     MaterialModule,
+    FlexLayoutModule,
+    AlertModule,
     MdInputModule,
     routing
   ],
