@@ -15,6 +15,12 @@
 	</div>
 </header>
 
+
+<div *ngIf="authenticated && !allowedDomain" class="alert alert-warning" role="alert">
+	<p>承認されたドメインではありません。</p>
+	<p>大学のアカウントでログインを行ってください。</p>
+</div>
+
 <!--
 <div layout="column" layout-fill>
 	<md-toolbar color="accent">

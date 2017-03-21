@@ -11,15 +11,10 @@ export class CanActivateViaOAuthGuard implements CanActivate {
 
   }
   canActivate() {
-    if (!this.authService.isAuthenticated()) {
-      console.log("is not authenticated.");
-      this.router.navigateByUrl('/');
-    }else if (!this.authService.isAllowedDomain()) {
-      console.log("is authenticated but is not allowed domain.");
-      this.router.navigateByUrl('/');
-    }else{
-      console.log("is authenticated and is allowed domain.");
+    if (this.authService.isAuthenticated() && this.authService.isAllowedDomain()) {
+      return true;
     }
-    return (!this.authService.isAuthenticated()) ? false : true;
+    this.router.navigateByUrl('/');
+    return false;
   }
 }

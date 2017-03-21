@@ -1,18 +1,48 @@
+<md-card *ngIf="subject === null">
+  <h3 md-subheader>科目の作成</h3>
 
-<md-card [hidden]="submitted">
-  <h4>講義の作成</h4>
-  <!--
-  <form ngSubmit="onSubmit()" #subjectForm="ngForm">
-    <div class="form-group">
-      <input type ="text" class="form-control" id="name" required
-      [(ngModel)]="subject.name" name ="name"
-      #name="ngModel">
-    </div>
+  <md-card-content>
+    <form #createSubjectForm="ngForm">
 
-    <div class="form-group">
-      <input type="text" class="form-control" id="id" required
-      [(ngModel)]="subject.id" name="id">
-    </div>
-  </form>
-  -->
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput type="text" placeholder="科目名"
+          [(ngModel)]="newSubject.name" name="name">
+      </md-input-container>
+
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput type="text" placeholder="管理者ID"
+          [(ngModel)]="id" name="id" [disabled]="true">
+        <span md-suffix>@shibaura-it.ac.jp</span>
+      </md-input-container>
+
+      <button md-raised-button color="primary"
+        type="submit" [disabled]="submitted"
+        (click)="createSubject(newSubject)">作成</button>
+    </form>
+
+  </md-card-content>
+</md-card>
+
+<md-card *ngIf="subject">
+  <h3 md-subheader>科目の更新</h3>
+
+  <md-card-content>
+    <form #updateSubjectForm="ngForm">
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput type="text" placeholder="科目名"
+          [(ngModel)]="subject.name" name="name">
+      </md-input-container>
+    </form>
+
+    <md-select [(ngModel)]="subject.semester">
+      <md-option *ngFor="let i of semesterOptions" [value]="i.value" >{{i.name}}</md-option>
+    </md-select>
+
+    <md-checkbox [(ngModel)]="subject.public">公開</md-checkbox>
+    <button md-raised-button color="primary"
+      type="submit" [disabled]="submitted"
+      (click)="updateSubject(subject)">更新</button>
+    <div><span>{{ subject | json }}</span></div>
+  </md-card-content>
+
 </md-card>

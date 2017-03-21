@@ -28,9 +28,13 @@ export class NavbarComponent {
 		this.authService.doLogin();
 	}
 
+	get allowedDomain(){
+		return this.authService.isAllowedDomain();
+	}
+
 	doLogout() {
 		this.authService.doLogout();
-		this.router.navigateByUrl('/public');
+		this.router.navigateByUrl('/');
 	}
 	get userId() {
     return this.authService.getId();

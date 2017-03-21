@@ -18,15 +18,14 @@ export class AdminAssignmentItemListComponent implements OnDestroy {
   subAssignment: Subscription;
 
   constructor(private adminService: AdminService) {
-
-    this.subSubject = adminService.adminSelectedSubject$.subscribe(
+    this.subSubject = this.adminService.adminSelectedSubject$.subscribe(
       subject => {
         this.selectedAssignment = null;
         this.selectedAssignmentItem = null;
       }
     );
 
-    this.subSubject = adminService.adminSelectedAssignment$.subscribe(
+    this.subAssignment = this.adminService.adminSelectedAssignment$.subscribe(
       assignment => {
         this.selectedAssignment = assignment;
         this.selectedAssignmentItem = null;

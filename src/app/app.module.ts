@@ -25,6 +25,8 @@ import { routing } from './app.routes';
 import { AdminComponent } from './admin/admin.component';
 import { AdminSubjectComponent } from './admin/subject.component';
 import { AdminSubjectFormComponent } from './admin/subject-form.component';
+import { AdminAssignmentFormComponent } from './admin/assignment-form.component';
+import { AdminAssignmentItemFormComponent } from './admin/assignment-item-form.component';
 import { AdminAssignmentListComponent } from './admin/assignment-list.component';
 import { AdminAssignmentItemListComponent } from './admin/assignment-item-list.component';
 
@@ -44,6 +46,8 @@ import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
     AdminSubjectComponent,
     AdminSubjectListComponent,
     AdminSubjectFormComponent,
+    AdminAssignmentFormComponent,
+    AdminAssignmentItemFormComponent,
     AdminAssignmentListComponent,
     AdminAssignmentItemListComponent,
     AdminUpdateSubjectComponent,

@@ -1,0 +1,22 @@
+
+<md-card *ngIf="subject && assignment && assignmentItem === null">
+
+  <h3 md-subheader>課題「{{assignment.name}}」の提出フォーム作成</h3>
+
+  <md-card-content>
+    <form #createAssignmentItemForm="ngForm">
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="提出フォーム名" type="text" name="name">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="説明" type="text" name="description">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="保存後のファイル名" type="text" name="alias">
+      </md-input-container>
+      <button md-raised-button color="primary" type="submit" (click)="createAssignmentItem(selectedSubject._id, selectedAssignment._id, createAssignmentItemForm.value)">作成</button>
+    </form>
+      <div><span>{{ createAssignmentItemForm.value | json }}</span></div>
+  </md-card-content>
+
+</md-card>

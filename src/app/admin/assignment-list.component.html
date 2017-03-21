@@ -3,6 +3,11 @@
   <h3 md-subheader>「{{selectedSubject.name}}」の課題一覧</h3>
 
   <md-card-content>
+
+    <div *ngIf="(selectedSubject?.assignments | json) == '[]'" class="alert alert-warning" role="alert">
+      課題はありません。
+    </div>
+
     <md-list dense class="assignments">
       <md-list-item
         *ngFor="let assignment of selectedSubject.assignments; let i=index"

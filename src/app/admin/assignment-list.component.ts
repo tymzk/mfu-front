@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { AdminService } from '../services/admin.service';
 import { Subscription } from 'rxjs';
@@ -12,21 +11,19 @@ import { Subject, Assignment } from '../models';
 })
 
 export class AdminAssignmentListComponent implements OnDestroy {
-  id: string;
   selectedSubject: Subject;
 	selectedAssignment: Assignment;
 	subSubject: Subscription;
 
   constructor(
-    private apiService: ApiService,
     private adminService: AdminService,
     private authService: AuthService) {
-			this.subSubject = adminService.adminSelectedSubject$.subscribe(
-				subject => {
-					this.selectedSubject = subject;
-					this.selectedAssignment = null;
-				}
-			);
+    this.subSubject = this.adminService.adminSelectedSubject$.subscribe(
+      subject => {
+        this.selectedSubject = subject;
+        this.selectedAssignment = null;
+      }
+    );
   }
 
   onSelectAssignment(assignment: Assignment): void {

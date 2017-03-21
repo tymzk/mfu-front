@@ -15,6 +15,7 @@ export class Subject implements Serializable<Subject> {
   deserialize(input): Subject{
     this._id         = input._id;
     this.name        = input.name;
+    this.public      = input.public;
     this.semester    = input.semester;
     this.teachers    = input.teachers;
     this.assistants  = input.assistants;

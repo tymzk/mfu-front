@@ -3,6 +3,11 @@
   <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
 
   <md-card-content>
+
+    <div *ngIf="(selectedAssignment?.items | json) == '[]'" class="alert alert-warning" role="alert">
+      提出フォームはありません。
+    </div>
+
     <md-list dense class="assignmentItems">
       <md-list-item
         *ngFor="let assignmentItem of selectedAssignment.items"
@@ -15,6 +20,8 @@
     </md-list>
   </md-card-content>
 
+
+<!--
   <md-divider></md-divider>
 
   <md-card-content *ngIf="selectedAssignmentItem">
@@ -37,5 +44,5 @@
     <div><span>{{ selectedAssignmentItem | json }}</span></div>
 
   </md-card-content>
-
+-->
 </md-card>

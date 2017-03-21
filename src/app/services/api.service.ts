@@ -96,7 +96,14 @@ export class ApiService {
   }
 
   updateSubject(subjectObjId: String, subject: Subject){
-    console.log("still in progress");
+    const url = `${this.subjectsUrl}/${subjectObjId}`;
+    var body = JSON.stringify(subject);
+    return this.http.put(url, body, this.options)
+      .map(response => null)
+      .catch(this.handleErrorObservable)
+      .finally(()=>{
+        console.log("updated");
+      });
   }
 
   // GET /api/subjects/subjectObjId/students

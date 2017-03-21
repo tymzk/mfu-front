@@ -1,7 +1,7 @@
 {
   "name": "minet-file-uploader",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",

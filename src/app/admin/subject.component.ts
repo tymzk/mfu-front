@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
@@ -17,6 +17,10 @@ import { Subject } from '../models';
 		</app-admin-assignment-item-list>
 		<app-admin-subject-form>
 		</app-admin-subject-form>
+		<app-admin-assignment-form>
+		</app-admin-assignment-form>
+		<app-admin-assignment-item-form>
+		</app-admin-assignment-item-form>
 	`
 })
 
@@ -41,4 +45,8 @@ export class AdminSubjectComponent {
       subjects => this.subjects = subjects,
       error => this.subjects = <any>error);
   }
+
+	ngOnDestroy() {
+	}
+
 }

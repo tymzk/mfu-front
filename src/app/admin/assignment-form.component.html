@@ -1,0 +1,24 @@
+
+<md-card *ngIf="subject && assignment === null">
+
+  <h3 md-subheader>{{subject.name}}の課題作成</h3>
+
+  <md-card-content>
+    <form #createAssignmentForm="ngForm">
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="課題名" type="text" name="name">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="説明" type="text" name="description">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <input mdInput ngModel placeholder="締切" type="datetime-local" name="deadline">
+      </md-input-container>
+      <button md-raised-button color="primary" type="submit" type="submit" (click)="createAssignment(subject._id, createAssignmentForm.value)">作成</button>
+    </form>
+
+    <div><span>{{ createAssignmentForm.value | json }}</span></div>
+    <div><span>{{ createAssignmentForm.deadline | date: "yyyy-MM-ddThh:mm"}}</span></div>
+
+  </md-card-content>
+</md-card>
