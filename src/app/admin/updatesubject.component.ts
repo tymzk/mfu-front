@@ -1,3 +1,4 @@
+/*
 import { Component, Input, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
@@ -123,7 +124,7 @@ export class AdminUpdateSubjectComponent implements OnInit {
     this.apiService.createAssignment(subjectObjId, assignment);
   }
 
-  updateAssignment(subjectObjId: String, assignment: Assignment) {
+  updateAssignment(subjectObjId: string, assignment: Assignment) {
     this.apiService.updateAssignment(subjectObjId, assignment);
   }
 
@@ -151,7 +152,8 @@ export class AdminUpdateSubjectComponent implements OnInit {
     console.log("still in progress");
   }
 
-  updateStudentsOfSubject(subjectId: String): void {
+  updateStudentsOfSubject(subjectId: string): void {
     this.apiService.updateStudentsOfSubject(subjectId, ReplaceTextToJsonArray(this.studentList));
   }
 }
+*/

@@ -15,18 +15,19 @@
   </md-card-content>
 
    <md-card-actions>
-      <form [formGroup]="addAdminForm" novalidate >
-        <div class="form-group">
-          <md-input-container class="md-block" flex-gt-sm>
-            <input mdInput placeholder="管理者ID" type="text" class="form-control" formControlName="id">
-            <span md-suffix>@shibaura-it.ac.jp</span>
-          </md-input-container>
-          <button md-raised-button color="primary" type="submit" (click)="addAdmin(addAdminForm.value)">追加</button>
-          <button md-raised-button color="primary" type="submit" (click)="removeAdmin(addAdminForm.value)">削除</button>
-        </div>
+      <form [formGroup]="adminForm">
+        <md-input-container class="md-block" flex-gt-sm>
+          <input mdInput type="text" placeholder="管理者ID"
+            formControlName="id">
+          <span md-suffix>@shibaura-it.ac.jp</span>
+        </md-input-container>
+        <button md-raised-button color="primary" type="submit"
+          (click)="addAdmin(adminForm.value.id)">追加</button>
+        <button md-raised-button color="primary" type="submit"
+          (click)="removeAdmin(adminForm.value.id)">削除</button>
       </form>
    </md-card-actions>
 
 </md-card>
 
-<div><span>{{addAdminForm.value | json}}</span></div>
+<div><span>{{adminForm.value | json}}</span></div>

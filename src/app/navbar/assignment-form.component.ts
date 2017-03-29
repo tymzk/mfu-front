@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-assignment-form',
-  templateUrl: './assignment-form.component.html'
+  templateUrl: './assignment-form.component.html',
+  providers: [ ApiService ]
 })
 export class AdminAssignmentFormComponent implements OnDestroy {
 

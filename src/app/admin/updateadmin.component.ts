@@ -6,13 +6,13 @@ import { Subject, Person } from '../models';
 
 @Component({
   selector: 'app-admin-update-admin',
-  templateUrl: './updateadmin.component.html',
-  providers: [ ApiService ]
+  templateUrl: './updateadmin.component.html'
+
 })
 
 export class AdminUpdateAdminComponent implements OnInit {
   inputAdminId: String;
-  addAdminForm: FormGroup;
+  adminForm: FormGroup;
   admins: Person[];
 
   constructor(
@@ -24,22 +24,26 @@ export class AdminUpdateAdminComponent implements OnInit {
   ngOnInit() {
     this.getAdminList();
 
-    this.addAdminForm = this.fb.group({
+    this.adminForm = this.fb.group({
       id : ['',
         [
-          Validators.required,
-          Validators.minLength(4)
+          Validators.required
         ]
       ]
     });
   }
-
   getAdminList(): void {
-    this.apiService.getAdminIds().then(admins => this.admins = admins);
+    this.apiService.getAdminIds().subscribe(
+      admins => this.admins = admins
+    );
   }
 
-  addAdmin(admin: any){
-    console.log("mada: " + admin);
+  addAdmin(adminId: string){
+    this.apiService.addAdmin(adminId).subscribe(
+      admins => {
+        this.getAdminList();
+      }
+    );
   }
 
   removeAdmin(id: String) {

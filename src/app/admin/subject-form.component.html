@@ -68,7 +68,7 @@
         <md-icon> face </md-icon><span>{{teacher}}</span>
       </md-list-item>
     </md-list>
-
+    {{subject.teachers | json}}
     <form #updateTeacherForm="ngForm">
 
       <md-input-container class="md-block" flex-gt-sm>

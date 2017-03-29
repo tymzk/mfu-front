@@ -16,6 +16,7 @@ export class AdminSubjectFormComponent implements OnDestroy {
   private id: string;
   private subject: Subject;
   private newSubject: Subject;
+  subSubjects: Subscription;
 	subSubject: Subscription;
 	subAssignment: Subscription;
   showUpdateForm: boolean;
@@ -38,6 +39,11 @@ export class AdminSubjectFormComponent implements OnDestroy {
     this.newSubject = new Subject();
     this.newSubject.teachers = [ this.id ];
 
+    this.subSubjects = this.adminService.adminSubjects$.subscribe(
+      subjects => {
+      }
+    );
+
     this.subSubject = this.adminService.adminSelectedSubject$.subscribe(
       subject => {
         this.subject = subject;
@@ -45,13 +51,14 @@ export class AdminSubjectFormComponent implements OnDestroy {
     );
     this.subAssignment = this.adminService.adminSelectedAssignment$.subscribe(
       assignment => {
-
       }
     );
   }
 
 	ngOnDestroy() {
 		this.subSubject.unsubscribe();
+    this.subAssignment.unsubscribe();
+    this.subSubjects.unsubscribe();
 	}
 
   createSubject(subject: Subject) {
@@ -61,7 +68,10 @@ export class AdminSubjectFormComponent implements OnDestroy {
         this.submitted = false;
         this.newSubject = new Subject();
         this.newSubject.teachers = [ this.id ];
-      },
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects) }
+        );
+     },
       error => {
         this.submitted = false;
       }
@@ -69,13 +79,27 @@ export class AdminSubjectFormComponent implements OnDestroy {
   }
 
   addTeacher(subjectObjId: string, teacherId: string) {
-    console.log("still in progress");
-
+    this.apiService.addTeacherOfSubject(subjectObjId, teacherId).subscribe(
+      subject => {
+        this.subject = subject;
+        console.log("test" + subject.teachers.length);
+/*
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects) }
+        );*/
+      }
+    );
   }
 
   removeTeacher(subjectObjId: string, teacherId: string){
-    console.log("still in progress");
-
+    this.apiService.removeTeacherOfSubject(subjectObjId, teacherId).subscribe(
+      subject => {
+        this.subject = subject;
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects) }
+        );
+      }
+    );
   }
 
   addAssistant(subjectId: string, assistantId: string): void {
@@ -94,6 +118,9 @@ export class AdminSubjectFormComponent implements OnDestroy {
     this.apiService.updateSubject(subject._id, subject).subscribe(
       subjects => {
         this.submitted = false;
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects) }
+        );
       },
       error => {
         this.submitted = false;

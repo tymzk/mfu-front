@@ -4,8 +4,7 @@ import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin',
-  template: `<router-outlet></router-outlet>`,
-  providers: [ AdminService ]
+  template: `<router-outlet></router-outlet>`
 })
 export class AdminComponent implements OnInit {
 

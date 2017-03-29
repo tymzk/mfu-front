@@ -3,13 +3,14 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { AdminService } from '../services/admin.service';
+import { Subscription } from 'rxjs';
 
 import { Subject } from '../models';
 
 @Component({
   selector: 'app-admin-subject',
   template: `
-		<app-admin-subject-list [subjects]="subjects">
+		<app-admin-subject-list>
 		</app-admin-subject-list>
 		<app-admin-assignment-list>
 		</app-admin-assignment-list>
@@ -26,9 +27,9 @@ import { Subject } from '../models';
 
 export class AdminSubjectComponent {
 	private id: string;
-  subjects: Subject[];
+  private subjects: Subject[];
   selectedSubject: Subject;
-
+  subSubjects: Subscription;
   constructor(
     private apiService: ApiService,
     private adminService: AdminService,
@@ -37,16 +38,26 @@ export class AdminSubjectComponent {
 
   ngOnInit() {
     this.id = this.authService.getId();
-    this.getAdminMySubjectList(this.id);
+    this.getAdminMySubjectList();
+
+    this.subSubjects = this.adminService.adminSubjects$.subscribe(
+      subjects => {
+        this.subjects = subjects;
+      }
+    );
   }
 
-  getAdminMySubjectList(id: string): void {
-    this.apiService.getAdminMySubjects(id).subscribe(
-      subjects => this.subjects = subjects,
-      error => this.subjects = <any>error);
+  getAdminMySubjectList(): void {
+    this.apiService.getAdminMySubjects(this.id).subscribe(
+      subjects => {
+        this.subjects = subjects;
+        this.adminService.onUpdatedSubjects(subjects);
+      }
+    );
   }
 
 	ngOnDestroy() {
+    this.subSubjects.unsubscribe();
 	}
 
 }

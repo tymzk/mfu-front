@@ -11,18 +11,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './assignment-form.component.html'
 })
 export class AdminAssignmentFormComponent implements OnDestroy {
-
+  private id: string;
   private subject: Subject;
   private assignment: Assignment;
+  private newAssignment: Assignment;
+  private submitted: boolean;
 	subSubject: Subscription;
 	subAssignment: Subscription;
   subjectForm: FormGroup;
-  submitted: boolean = false;
+
   constructor(
     private apiService: ApiService,
     private adminService: AdminService,
     private authService: AuthService,
     private fb: FormBuilder) {
+    this.submitted = false;
+    this.newAssignment = new Assignment();
+    this.id = this.authService.getId();
 
     this.subSubject = this.adminService.adminSelectedSubject$.subscribe(
       subject => {
@@ -45,6 +50,18 @@ export class AdminAssignmentFormComponent implements OnDestroy {
 		this.subSubject.unsubscribe();
 		this.subAssignment.unsubscribe();
 	}
+  createAssignment(subjectObjId: string, assignment: Assignment) {
+    this.submitted = true;
+    this.apiService.createAssignment(subjectObjId, assignment).subscribe(
+      () => {
+        this.submitted = false;
+        this.newAssignment = new Assignment();
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects) }
+        );
+      }
+    );
+  }
 
   updateAssignment(subjectObjId: string, assignment: Assignment) {
     this.submitted = true;

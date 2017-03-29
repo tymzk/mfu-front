@@ -12,8 +12,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-user-subject',
   templateUrl: './subject.component.html',
-  styleUrls: ['./subject.component.css'],
-	providers: [ ApiService ]
+  styleUrls: ['./subject.component.css']
 })
 export class UserSubjectComponent implements OnInit {
   subjects: Subject[];

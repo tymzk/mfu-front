@@ -34,31 +34,30 @@ export class ApiService {
   private options = new RequestOptions({ headers: this.headers });
 
   // GET /api/admins/ids
-  getAdminIds(): Promise<Person[]>{
+  getAdminIds(): Observable<Person[]>{
     const url = `${this.adminsUrl}/ids`;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then(response => response.json() as Person[])
-      .catch(this.handleError);
+    return this.http.get(url)
+      .map(response => response.json() as Person[])
+      .catch(this.handleErrorObservable);
   }
 
-  addAdmin(userId: String) {
+  addAdmin(userId: string): Observable<string> {
     const url = `${this.adminsUrl}/${userId}`;
-    return this.http
-      .post(url, this.options)
-      .toPromise()
-      .then(response => response.json())
-      .catch(this.handleError);
+    return this.http.post(url, this.options)
+      .map(response => response.json() as string)
+      .catch(this.handleErrorObservable);
   }
 
-  removeAdmin(userId: String) {
+  removeAdmin(userId: string): Observable<Person[]> {
     const url = `${this.adminsUrl}/${userId}`;
-    return this.http
-      .delete(url, this.options)
-      .toPromise()
-      .then(response => response.json())
-      .catch(this.handleError);
+    return this.http.delete(url, this.options)
+      .map(response => response.json() as Person[])
+      .catch(this.handleErrorObservable);
+  }
+
+  private extractSubjectData(res: Response){
+    console.log(JSON.stringify(new Subject().deserialize(res.json())));
+    return new Subject().deserialize(res.json());
   }
 
   private extractData(res: Response) {
@@ -128,24 +127,21 @@ export class ApiService {
   }
 
   // POST /api/subjects/:subjectObjId/teachers/:teacherId (no check)
-  addTeacherOfSubject(subjectObjId: String, teacherId: String): Promise<void> {
+  addTeacherOfSubject(subjectObjId: string, teacherId: string): Observable<Subject> {
     const url = `${this.subjectsUrl}/${subjectObjId}/teachers/${teacherId}`;
-    return this.http
-      .post(url, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+    return this.http.post(url, this.options)
+      .map(response => this.extractSubjectData(response) as Subject)
+      .catch(this.handleErrorObservable);
   }
-  removeTeacherOfSubject(subjectObjId: String, teacherId: String): Promise<void> {
+
+  removeTeacherOfSubject(subjectObjId: string, teacherId: string): Observable<Subject> {
     const url = `${this.subjectsUrl}/${subjectObjId}/teachers/${teacherId}`;
-    return this.http
-      .delete(url, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+    return this.http.delete(url, this.options)
+      .map(response => response.json() as Subject)
+      .catch(this.handleErrorObservable);
   }
   // PUT /api/subjects/:subjectObjId/assistants (no check)
-  addAssistantOfSubject(subjectObjId: String, assistantId: String) {
+  addAssistantOfSubject(subjectObjId: string, assistantId: string) {
     const url = `${this.subjectsUrl}/${subjectObjId}/assistants`;
     return this.http
       .post(url, this.options)
@@ -155,15 +151,16 @@ export class ApiService {
   }
 
   // POST /api/subjects/:subjectObjId/assignments
-  createAssignment(subjectObjId: String, assignment: Assignment){
+  createAssignment(subjectObjId: String, assignment: Assignment): Observable<any>{
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments`;
     var body = JSON.stringify(assignment);
 //    var body = new Assignment().serialize(assignment);
-    return this.http
-      .post(url, body, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+    return this.http.post(url, body, this.options)
+      .map(response => null)
+      .catch(this.handleErrorObservable)
+      .finally(()=>{
+        console.log("created");
+      });
   }
 
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId
