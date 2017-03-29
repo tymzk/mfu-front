@@ -14,7 +14,9 @@
       <md-list-item *ngFor="let subject of subjects; let i=index"
         [class.selected]="subject === selectedSubject">
         <md-icon md-list-avatar> school </md-icon>
-        <h4 md-line>{{subject.semester}}: {{subject.name}} 公開設定: {{subject.public}}</h4>
+        <md-icon md-list-avatar *ngIf=subject.public> check circle </md-icon>
+        <md-icon md-list-avatar *ngIf=!subject.public> close </md-icon>
+        <h4 md-line>{{subject.name}}</h4>
         <button md-raised-button (click)="onSelectSubject(subject)" color="primary">詳細</button>
       </md-list-item>
     </md-list>

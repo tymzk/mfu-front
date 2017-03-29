@@ -1,34 +1,34 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-function replaceBreakLineCode(data: String){
+function replaceBreakLineCode(data: string){
 	return data.replace(/^(?:\r\n|\r|\n)/gm, "\n");
 }
 
-function removeSpace(data: String){
+function removeSpace(data: string){
 	return data.replace(/(^\s+)|(\s+$)/g, "");
 }
 
-function removeBlankLine(data: String){
+function removeBlankLine(data: string){
 	return data.replace(/^(?:\r\n|\r|\n)/gm, "");
 }
 
-function insertBreakLine(data: String){
+function insertBreakLine(data: string){
 	return data.replace(/(?:\r\n|\r|\n)/g, "<br />");
 }
 
-export function ReplaceTextToJsonArray(value: String){
-	var prefJsonArray = '[ ';
-	var suffJsonArray = ' ]';
+export function ReplaceTextToJsonArray(value: string){
+	var prefJsonArray: string = '[ ';
+	var suffJsonArray: string = ' ]';
 //	var prefEachValue = '{ "id": "';
 //	var suffEachValue = '" }';
-	var prefEachValue = '"';
-	var suffEachValue = '"';
-
+	var prefEachValue: string = '"';
+	var suffEachValue: string = '"';
+	var valueArray: string[] = [];
 
 //		value = replaceBreakLineCode(value);
 	value = removeSpace(value);
 	value = removeBlankLine(value);
-	var valueArray = value.split(/(?:\r\n|\r|\n)/g);
+	valueArray = value.split(/(?:\r\n|\r|\n)/g);
 	// remove unnecessary lines
 
 	// put prefix and suffix
@@ -46,7 +46,7 @@ export function ReplaceTextToJsonArray(value: String){
 	name: 'ReplaceBreakLineCodePipe'
 })
 export class ReplaceBreakLineCodePipe implements PipeTransform {
-	transform(data: String): String{
+	transform(data: string): string{
 		return replaceBreakLineCode(data);
 	}
 }
@@ -55,7 +55,7 @@ export class ReplaceBreakLineCodePipe implements PipeTransform {
 	name: 'InsertBreakLinePipe'
 })
 export class InsertBreakLinePipe implements PipeTransform {
-	transform(value: String): String{
+	transform(value: string): string{
 		return insertBreakLine(value);
 	}
 }
@@ -64,7 +64,7 @@ export class InsertBreakLinePipe implements PipeTransform {
 	name: 'RemoveSpacePipe'
 })
 export class RemoveSpacePipe implements PipeTransform {
-	transform(value: String): String{
+	transform(value: string): string{
 		return removeSpace(value);
 	}
 }
@@ -73,7 +73,7 @@ export class RemoveSpacePipe implements PipeTransform {
 	name: 'RemoveBlankLinePipe'
 })
 export class RemoveBlankLinePipe implements PipeTransform {
-	transform(value: String): String{
+	transform(value: string): string{
 		return removeBlankLine(value);
 	}
 }
@@ -84,7 +84,7 @@ export class RemoveBlankLinePipe implements PipeTransform {
 })
 export class TextToJsonArrayPipe implements PipeTransform {
 
-	transform(value: String): String{
+	transform(value: string): string{
 		return ReplaceTextToJsonArray(value);
 	}
 }

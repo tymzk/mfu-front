@@ -55,7 +55,7 @@ export class AdminAssignmentItemFormComponent implements OnDestroy {
     this.apiService.createAssignment(subjectObjId, assignment);
   }
 
-  updateAssignment(subjectObjId: String, assignment: Assignment) {
+  updateAssignment(subjectObjId: string, assignment: Assignment) {
     this.apiService.updateAssignment(subjectObjId, assignment);
   }
 }

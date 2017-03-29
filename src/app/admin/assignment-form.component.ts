@@ -17,7 +17,7 @@ export class AdminAssignmentFormComponent implements OnDestroy {
 	subSubject: Subscription;
 	subAssignment: Subscription;
   subjectForm: FormGroup;
-
+  submitted: boolean = false;
   constructor(
     private apiService: ApiService,
     private adminService: AdminService,
@@ -37,8 +37,6 @@ export class AdminAssignmentFormComponent implements OnDestroy {
     );
   }
 
-	submitted: boolean = false;
-
 	onSubmit() {
 		this.submitted = true;
 	}
@@ -47,4 +45,18 @@ export class AdminAssignmentFormComponent implements OnDestroy {
 		this.subSubject.unsubscribe();
 		this.subAssignment.unsubscribe();
 	}
+
+  updateAssignment(subjectObjId: string, assignment: Assignment) {
+    this.submitted = true;
+    this.apiService.updateAssignment(subjectObjId, assignment).subscribe(
+      subjects => {
+        this.submitted = false;
+      },
+      error => {
+        this.submitted = false;
+      }
+    );
+    this.submitted = false;
+  }
+
 }

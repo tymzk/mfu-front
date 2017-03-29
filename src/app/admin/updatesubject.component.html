@@ -1,3 +1,4 @@
+<!--
 <md-card>
 
   <md-card-title-group>
@@ -86,10 +87,10 @@
         公開
       </md-checkbox>
       <button md-raised-button color="primary" type="submit" (click)="updateAssignment(selectedSubject._id, selectedAssignment)">課題を修正</button>
-<!--
+
       <div><span>{{ selectedAssignment | json }}</span></div>
       <div><span>{{ selectedAssignment.deadline |  date: "yyyy-MM-ddThh:mm"}}</span></div>
--->
+
       <md-divider></md-divider>
 
       <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
@@ -179,7 +180,7 @@
 
 </md-card>
 
-<!--
+
 <md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>
@@ -187,7 +188,7 @@
   </md-card-title-group>
 
 </md-card>
--->
+
 <md-card *ngIf="selectedSubject && selectedAssignment === null && selectedAssignmentItem === null">
 
   <md-card-title-group>
@@ -235,3 +236,4 @@
 </md-card>
 
 <router-outlet></router-outlet>
+-->

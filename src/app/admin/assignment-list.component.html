@@ -26,13 +26,15 @@
       <h3 md-subheader>課題「{{selectedAssignment.name}}」の詳細</h3>
 
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput [(ngModel)]="selectedAssignment.name" placeholder="課題名" type="text">
+        <input mdInput type="text" [(ngModel)]="selectedAssignment.name"
+        required minlength="4"
+        placeholder="課題名">
       </md-input-container>
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput [(ngModel)]="selectedAssignment.description" placeholder="説明" type="text">
+        <input mdInput type="text" [(ngModel)]="selectedAssignment.description" placeholder="説明">
       </md-input-container>
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput [(ngModel)]="selectedAssignment.deadline" placeholder="締切" type="datetime-local">
+        <input mdInput type="datetime-local" [(ngModel)]="selectedAssignment.deadline" placeholder="締切">
       </md-input-container>
       <md-checkbox [(ngModel)]="selectedAssignment.public">
         公開

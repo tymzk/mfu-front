@@ -4,7 +4,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 
-import { Subject, Person, Assignment, AssignmentItem } from '../models';
+import { Subject, Person, Assignment, AssignmentItem, SubmittedInfo } from '../models';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -167,14 +167,15 @@ export class ApiService {
   }
 
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId
-  updateAssignment(subjectObjId: String, assignment: Assignment): Promise<Assignment>{
+  updateAssignment(subjectObjId: string, assignment: Assignment): Observable<Assignment>{
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignment._id}`;
     var body = JSON.stringify(assignment);
-    return this.http
-    .put(url, body, this.options)
-    .toPromise()
-    .then(response => response.json() as Assignment)
-    .catch(this.handleError);
+    return this.http.put(url, body, this.options)
+      .map(response => response.json() as Assignment)
+      .catch(this.handleErrorObservable)
+      .finally(()=>{
+        console.log("updated");
+      });
   }
 
   // POST /api/subjects/:subjectObjId/assignments/:assignmentObjId/items
@@ -199,7 +200,7 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  // POST /api/users/:userId/subjects
+  // GET /api/users/:userId/subjects
   userGetSubjects(id: String): Promise<Subject[]> {
     const url = `${this.usersUrl}/${id}/subjects`;
     return this.http
@@ -207,6 +208,17 @@ export class ApiService {
       .toPromise()
       .then(response => response.json() as Subject[])
       .catch(this.handleError);
+  }
+
+  // GET /api/users/:userId/subjects/:subjectObjId/assignments/:assignmentObjId
+  userGetSubmittedInfo(userId: string, subjectObjId: string, assignmentObjId: string): Observable<SubmittedInfo[]> {
+    const url = `${this.usersUrl}/${userId}/subjects/${subjectObjId}/assignments/${assignmentObjId}/files`;
+    return this.http.get(url)
+      .map(response => response.json() as SubmittedInfo[])
+      .catch(this.handleErrorObservable)
+      .finally(()=>{
+        console.log("got");
+      });
   }
 
   private handleErrorObservable (error: Response | any) {

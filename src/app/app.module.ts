@@ -31,7 +31,7 @@ import { AdminAssignmentListComponent } from './admin/assignment-list.component'
 import { AdminAssignmentItemListComponent } from './admin/assignment-item-list.component';
 
 import { AdminUpdateAdminComponent } from './admin/updateadmin.component';
-import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
+//import { AdminUpdateSubjectComponent } from './admin/updatesubject.component';
 import { AdminSubjectListComponent } from './admin/subject-list.component';
 
 import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
@@ -50,7 +50,7 @@ import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
     AdminAssignmentItemFormComponent,
     AdminAssignmentListComponent,
     AdminAssignmentItemListComponent,
-    AdminUpdateSubjectComponent,
+//    AdminUpdateSubjectComponent,
     UserSubjectComponent,
     RemoveSpacePipe,
     RemoveBlankLinePipe,

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
-import { Subject, Assignment, AssignmentItem } from '../../models';
+import { Subject, Assignment, AssignmentItem, SubmittedInfo } from '../../models';
 
 import { Router} from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-user-subject',
@@ -20,6 +21,8 @@ export class UserSubjectComponent implements OnInit {
   selectedAssignment: Assignment;
   selectedAssignmentItem: AssignmentItem;
   filesToUpload: Array<File>;
+  private submitted: SubmittedInfo[];
+
 
   upload() {
     this.makeFileRequest('http://localhost:3001/upload',[],this.filesToUpload)
@@ -93,6 +96,7 @@ export class UserSubjectComponent implements OnInit {
     this.getSubjects(this.authService.getId());
     console.log(this.authService.getId());
     console.log(this.subjects);
+    this.submitted = [];
   }
 
 
@@ -108,14 +112,43 @@ export class UserSubjectComponent implements OnInit {
 
   onSelectAssignment(assignment: Assignment): void {
     this.selectedAssignment = assignment;
+    this.checkSubmitted('mf12061', this.selectedSubject._id, this.selectedAssignment._id);
   }
 
   onSelectAssignmentItem(assignmentItem: AssignmentItem): void {
     this.selectedAssignmentItem = assignmentItem;
   }
 
-  checkUploadedAssignmentItems(){
-
+  checkSubmitted(userId: string, subjectObjId: string, assignmentObjId: string){
+    this.apiService.userGetSubmittedInfo(userId, subjectObjId, assignmentObjId)
+      .subscribe(data => {
+        this.submitted = data;
+        console.log(data);
+      });
   }
-
+  printSubmittedFileSize(assignmentItemObjId: string): number{
+    // kuso mitaina code nanode naositai.
+    for(var i = 0; i < this.submitted.length; i++){
+      if(this.submitted[i]._id == assignmentItemObjId){
+        return this.submitted[i].size;
+      }
+    }
+  }
+  printSubmittedDate(assignmentItemObjId: string): Date{
+    // kuso mitaina code nanode naositai.
+    for(var i = 0; i < this.submitted.length; i++){
+      if(this.submitted[i]._id == assignmentItemObjId){
+        return this.submitted[i].mtime;
+      }
+    }
+  }
+  isSubmittedItem(assignmentItemObjId: string): boolean {
+    // kuso mitaina code nanode naositai.
+    for(var i = 0; i < this.submitted.length; i++){
+      if(this.submitted[i]._id == assignmentItemObjId){
+        return true;
+      }
+    }
+    return false;
+  }
 }

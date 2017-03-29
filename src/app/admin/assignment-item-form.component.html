@@ -6,17 +6,49 @@
   <md-card-content>
     <form #createAssignmentItemForm="ngForm">
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput ngModel placeholder="提出フォーム名" type="text" name="name">
+        <input mdInput type="text" placeholder="提出フォーム名"
+          ngModel name="name">
       </md-input-container>
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput ngModel placeholder="説明" type="text" name="description">
+        <input mdInput type="text"placeholder="説明"
+          ngModel name="description">
       </md-input-container>
       <md-input-container class="md-block" flex-gt-sm>
-        <input mdInput ngModel placeholder="保存後のファイル名" type="text" name="alias">
+        <input mdInput type="text" placeholder="保存後のファイル名"
+          ngModel name="alias">
       </md-input-container>
-      <button md-raised-button color="primary" type="submit" (click)="createAssignmentItem(selectedSubject._id, selectedAssignment._id, createAssignmentItemForm.value)">作成</button>
+      <button md-raised-button color="primary" type="submit"
+        (click)="createAssignmentItem(selectedSubject._id, selectedAssignment._id, createAssignmentItemForm.value)">作成</button>
     </form>
       <div><span>{{ createAssignmentItemForm.value | json }}</span></div>
+  </md-card-content>
+
+</md-card>
+
+<md-card>
+
+  <md-card-content *ngIf="assignmentItem">
+
+    <h3 md-subheader>{{assignmentItem.name}}の修正</h3>
+
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput type="text" placeholder="課題名"
+        [(ngModel)]="assignmentItem.name" name="name">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput type="text" placeholder="説明"
+        [(ngModel)]="assignmentItem.description" name="description">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm>
+      <input mdInput type="text" placeholder="保存時のファイル名"
+        [(ngModel)]="assignmentItem.alias" name="alias">
+    </md-input-container>
+    <button md-raised-button color="primary" type="submit"
+      (click)="updateAssignmentItem(subject._id, assignment._id, assignmentItem)">
+      提出フォームを修正
+    </button>
+    <div><span>{{ assignmentItem | json }}</span></div>
+
   </md-card-content>
 
 </md-card>

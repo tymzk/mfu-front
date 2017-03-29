@@ -57,16 +57,20 @@
       <md-card-content>
         <md-list dense class="assignmentItems">
           <md-list-item
-            *ngFor="let assignmentItem of selectedAssignment?.items"
+            *ngFor="let assignmentItem of selectedAssignment?.items; let i=index"
             (click)="onSelectAssignmentItem(assignmentItem)"
             [class.selected]="assignmentItem === selectedAssignmentItem">
             <md-icon md-list-avatar>note</md-icon>
             <h4 md-line>{{assignmentItem.name}}</h4>
             <p md-line> {{assignmentItem.description}} </p>
+            <p md-line *ngIf="!isSubmittedItem(assignmentItem._id)"> 未提出 </p>
+            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)"> {{printSubmittedFileSize(assignmentItem._id)}} </p>
+            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)"> {{printSubmittedDate(assignmentItem._id) | date: "yyyy-MM-ddThh:mm"}} </p>
             <input type="file" (change)="fileChangeEvent($event)" placeholder="upload"/>
             <button type="button" (click)="upload()">提出</button>
          </md-list-item>
         </md-list>
+
       </md-card-content>
 
     </div>

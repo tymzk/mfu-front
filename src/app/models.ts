@@ -2,6 +2,21 @@ interface Serializable<T> {
   deserialize(input: Object): T;
 }
 
+
+export class SubmittedInfo implements Serializable<SubmittedInfo> {
+  _id: string;
+  mtime: Date;
+  size: number;
+
+  deserialize(input: any): SubmittedInfo{
+    this._id         = input._id;
+    this.mtime       = new Date(input.mtime);
+    this.size        = input.size;
+
+    return this;
+  }
+}
+
 export class Subject implements Serializable<Subject> {
   _id: string;
   name: string;
