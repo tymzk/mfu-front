@@ -14,7 +14,7 @@ import { ReplaceTextToJsonArray, TextToJsonArrayPipe } from '../pipes/texttojson
 export class AdminSubjectFormComponent implements OnDestroy {
 
   private id: string;
-  private subject: Subject;
+  subject: Subject;
   private newSubject: Subject;
   subSubjects: Subscription;
 	subSubject: Subscription;

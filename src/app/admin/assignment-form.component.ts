@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs';
 })
 export class AdminAssignmentFormComponent implements OnDestroy {
   private id: string;
-  private subject: Subject;
-  private assignment: Assignment;
+  subject: Subject;
+  assignment: Assignment;
   private newAssignment: Assignment;
   private submitted: boolean;
 	subSubject: Subscription;
@@ -37,7 +37,8 @@ export class AdminAssignmentFormComponent implements OnDestroy {
     );
     this.subAssignment = this.adminService.adminSelectedAssignment$.subscribe(
       assignment => {
-        this.assignment = assignment;
+        this.assignment = new Assignment().deserialize(assignment);
+        console.log(this.assignment.deadline.toISOString());
       }
     );
   }

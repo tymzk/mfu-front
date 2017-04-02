@@ -5,22 +5,25 @@
 
   <md-card-content>
     <form #createAssignmentItemForm="ngForm">
+
       <md-input-container class="md-block" flex-gt-sm>
         <input mdInput type="text" placeholder="提出フォーム名"
-          ngModel name="name">
+          [(ngModel)]="newAssignmentItem.name" name="name">
       </md-input-container>
+
       <md-input-container class="md-block" flex-gt-sm>
         <input mdInput type="text"placeholder="説明"
-          ngModel name="description">
+          [(ngModel)]="newAssignmentItem.description" name="description">
       </md-input-container>
+
       <md-input-container class="md-block" flex-gt-sm>
         <input mdInput type="text" placeholder="保存後のファイル名"
-          ngModel name="alias">
+          [(ngModel)]="newAssignmentItem.alias" name="alias">
       </md-input-container>
       <button md-raised-button color="primary" type="submit"
-        (click)="createAssignmentItem(selectedSubject._id, selectedAssignment._id, createAssignmentItemForm.value)">作成</button>
+        (click)="createAssignmentItem(subject._id, assignment._id, newAssignmentItem)">作成</button>
     </form>
-      <div><span>{{ createAssignmentItemForm.value | json }}</span></div>
+      <div><span>{{ newAssignmentItem| json }}</span></div>
   </md-card-content>
 
 </md-card>

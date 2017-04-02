@@ -26,6 +26,7 @@ export class AuthService {
 
   constructor(private windows: WindowService, private http: Http) {
     this.oAuthCallbackUrl = "http://localhost.co.jp:4200/auth/callback";
+//    this.oAuthCallbackUrl = "http://localhost.co.jp/auth/callback";
     this.oAuthTokenUrl = "https://accounts.google.com/o/oauth2/auth?redirect_uri=__callbackUrl__&response_type=token&client_id=__clientId__&scope=__scopes__";
     this.oAuthTokenUrl = this.oAuthTokenUrl
       .replace('__callbackUrl__', this.oAuthCallbackUrl)

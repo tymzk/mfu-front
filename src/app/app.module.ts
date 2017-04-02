@@ -9,6 +9,7 @@ import { AlertModule } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { CallbackComponent } from './auth/callback';
 
 import { ReplaceTextToJsonArray, InsertBreakLinePipe, TextToJsonArrayPipe, RemoveSpacePipe, RemoveBlankLinePipe, ReplaceBreakLineCodePipe } from './pipes/texttojsonarray.pipe';
 
@@ -42,6 +43,7 @@ import { ConvertUtcToLocalTimePipe } from './pipes/utctolocaltime.pipe';
     AppComponent,
     HomeComponent,
     NavbarComponent,
+    CallbackComponent,
     AdminComponent,
     AdminUpdateAdminComponent,
     AdminSubjectComponent,

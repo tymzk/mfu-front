@@ -10,17 +10,20 @@ import { Router} from '@angular/router';
 })
 
 export class NavbarComponent {
+	private isAdmin: boolean;
+
 	constructor(
 		private apiService: ApiService,
 		private authService: AuthService,
 		public router : Router) {
+		this.isAdmin = false;
 	}
 
-	get administrator(){
+	get administrator(): boolean{
 		return this.authService.isAuthenticated() && true;
 	}
 
-	get authenticated(){
+	get authenticated(): boolean{
 		return this.authService.isAuthenticated();
 	}
 
@@ -28,7 +31,7 @@ export class NavbarComponent {
 		this.authService.doLogin();
 	}
 
-	get allowedDomain(){
+	get allowedDomain(): boolean{
 		return this.authService.isAllowedDomain();
 	}
 

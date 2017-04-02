@@ -15,6 +15,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./subject.component.css']
 })
 export class UserSubjectComponent implements OnInit {
+  private id: string;
+  private percent: string;
   subjects: Subject[];
   selectedSubject: Subject;
   selectedAssignment: Assignment;
@@ -22,12 +24,28 @@ export class UserSubjectComponent implements OnInit {
   filesToUpload: Array<File>;
   private submitted: SubmittedInfo[];
 
+  uploadJsonData: String;
+
+  constructor(
+    private authService: AuthService,
+    private apiService: ApiService) {
+    this.filesToUpload = [];
+    this.percent = "0";
+  }
+
+  ngOnInit() {
+    this.getSubjects(this.authService.getId());
+    this.id = this.authService.getId();
+    console.log(this.subjects);
+    this.submitted = [];
+  }
+
 
   upload() {
-    this.makeFileRequest('http://localhost:3001/upload',[],this.filesToUpload)
+    this.makeFileRequest('http://localhost.co.jp:3001/upload',[],this.filesToUpload)
       .then(
         (result) => {
-          console.log("test")
+          this.checkSubmitted(this.id, this.selectedSubject._id, this.selectedAssignment._id);
         }, (error) => {
           console.log("error");
         }
@@ -39,6 +57,8 @@ export class UserSubjectComponent implements OnInit {
   }
 
   makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+    var i = 1;
+
     return new Promise((resolve, reject) => {
       var formData: any = new FormData();
       var xhr = new XMLHttpRequest();
@@ -59,7 +79,8 @@ export class UserSubjectComponent implements OnInit {
 
       formData.append('data', jsondata);
 
-      xhr.upload.addEventListener("progress", (evt) => this.progressFunction(evt), false);
+      xhr.upload.addEventListener("progress",
+        (evt) => this.progressFunction(evt), false);
 
       xhr.onreadystatechange = function () {
         if(xhr.readyState == 4) {
@@ -77,31 +98,16 @@ export class UserSubjectComponent implements OnInit {
 
   progressFunction(evt){
     if(evt.lengthComputable) {
-//      this.percent = Math.round(event.loaded / event.total * 100) + "%";
+      this.percent = Math.round(evt.loaded / evt.total * 100) + "%";
       console.log(Math.round(evt.loaded / evt.total * 100) + "%");
     }
   }
 
-  uploadJsonData: String;
-
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService) {
-    this.filesToUpload = [];
-
-  }
-
-  ngOnInit() {
-    this.getSubjects(this.authService.getId());
-    console.log(this.authService.getId());
-    console.log(this.subjects);
-    this.submitted = [];
-  }
-
 
   getSubjects(userId: String): void {
-    this.apiService.userGetSubjects(userId)
-      .then(subjects => this.subjects = subjects);
+    this.apiService.userGetSubjects(userId).subscribe(
+      subjects => this.subjects = subjects
+    );
   }
 
 
@@ -111,7 +117,7 @@ export class UserSubjectComponent implements OnInit {
 
   onSelectAssignment(assignment: Assignment): void {
     this.selectedAssignment = assignment;
-    this.checkSubmitted('mf12061', this.selectedSubject._id, this.selectedAssignment._id);
+    this.checkSubmitted(this.id, this.selectedSubject._id, this.selectedAssignment._id);
   }
 
   onSelectAssignmentItem(assignmentItem: AssignmentItem): void {

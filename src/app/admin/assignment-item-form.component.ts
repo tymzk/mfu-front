@@ -11,19 +11,26 @@ import { Subscription } from 'rxjs';
   templateUrl: './assignment-item-form.component.html'
 })
 export class AdminAssignmentItemFormComponent implements OnDestroy {
+  private id: string;
 
-  private subject: Subject;
-  private assignment: Assignment;
-  private assignmentItem: AssignmentItem;
+  subject: Subject;
+  assignment: Assignment;
+  assignmentItem: AssignmentItem;
+  private newAssignmentItem: AssignmentItem;
+  private submitted: boolean;
 	subSubject: Subscription;
 	subAssignment: Subscription;
 	subAssignmentItem: Subscription;
-	submitted: boolean = false;
 
   constructor(
     private apiService: ApiService,
     private adminService: AdminService,
+    private authService: AuthService,
     private fb: FormBuilder) {
+    this.submitted = false;
+    this.id = this.authService.getId();
+    this.newAssignmentItem = new AssignmentItem();
+
     this.subSubject = this.adminService.adminSelectedSubject$.subscribe(
       subject => {
         this.subject = subject;
@@ -50,12 +57,30 @@ export class AdminAssignmentItemFormComponent implements OnDestroy {
 		this.subAssignmentItem.unsubscribe();
 	}
 
-  createAssignment(subjectObjId: String, assignment: Assignment) {
-		this.submitted = true;
-    this.apiService.createAssignment(subjectObjId, assignment);
+ createAssignmentItem(subjectObjId: string, assignmentObjId: string, assignmentItem: AssignmentItem) {
+    this.apiService.createAssignmentItem(subjectObjId, assignmentObjId, assignmentItem).subscribe(
+      subject => {
+        this.submitted = false;
+        this.newAssignmentItem = new AssignmentItem();
+        this.apiService.getAdminMySubjects(this.id).subscribe(
+          subjects => { this.adminService.onUpdatedSubjects(subjects)
+            for(var i=0; i < subject.length; i++){
+              if(subject[i]._id == subject[i]._id){
+
+              }
+            }
+          }
+        );
+
+      }
+    );
   }
 
-  updateAssignment(subjectObjId: string, assignment: Assignment) {
-    this.apiService.updateAssignment(subjectObjId, assignment);
+  updateAssignmentItem(subjectObjId: string, assignmentObjId: string, assignmentItem: AssignmentItem) {
+    this.apiService.updateAssignmentItem(subjectObjId, assignmentObjId, assignmentItem).subscribe(
+      () => {
+
+      }
+    );
   }
 }

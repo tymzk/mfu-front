@@ -13,7 +13,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ApiService {
   constructor (private http: Http) {}
-  private apiUrl = 'http://localhost:3001/api';
+  private apiUrl = 'http://localhost.co.jp:3001/api';
   private adminsUrl = `${this.apiUrl}/admins`;
   private usersUrl = `${this.apiUrl}/users`
   private subjectsUrl = `${this.apiUrl}/subjects`;
@@ -26,10 +26,6 @@ export class ApiService {
     );
   }
 
-  public isAdministrator(email) {
-    return
-  }
-
   private headers = new Headers({'Content-Type': 'application/json'});
   private options = new RequestOptions({ headers: this.headers });
 
@@ -38,6 +34,13 @@ export class ApiService {
     const url = `${this.adminsUrl}/ids`;
     return this.http.get(url)
       .map(response => response.json() as Person[])
+      .catch(this.handleErrorObservable);
+  }
+
+  isAdministrator(userId: string): Observable<boolean>{
+    const url = `${this.adminsUrl}/ids/${userId}`
+    return this.http.get(url)
+      .map(response => response.json().isAdmin as boolean)
       .catch(this.handleErrorObservable);
   }
 
@@ -58,6 +61,17 @@ export class ApiService {
   private extractSubjectData(res: Response){
     console.log(JSON.stringify(new Subject().deserialize(res.json())));
     return new Subject().deserialize(res.json());
+  }
+
+  private extractSubmittedInfos(res: Response){
+    var submittedInfos: SubmittedInfo[];
+    let body = res.json();
+    submittedInfos = [];
+
+    for(var i = 0; i < body.length; i++){
+      submittedInfos.push(new SubmittedInfo().deserialize(body[i]));
+    }
+    return submittedInfos;
   }
 
   private extractData(res: Response) {
@@ -154,7 +168,6 @@ export class ApiService {
   createAssignment(subjectObjId: String, assignment: Assignment): Observable<any>{
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments`;
     var body = JSON.stringify(assignment);
-//    var body = new Assignment().serialize(assignment);
     return this.http.post(url, body, this.options)
       .map(response => null)
       .catch(this.handleErrorObservable)
@@ -166,7 +179,7 @@ export class ApiService {
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId
   updateAssignment(subjectObjId: string, assignment: Assignment): Observable<Assignment>{
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignment._id}`;
-    var body = JSON.stringify(assignment);
+    var body = assignment.serialize();
     return this.http.put(url, body, this.options)
       .map(response => response.json() as Assignment)
       .catch(this.handleErrorObservable)
@@ -179,39 +192,33 @@ export class ApiService {
   createAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/items`;
     var body = JSON.stringify(assignmentItem);
-    return this.http
-      .post(url, body, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+    return this.http.post(url, body, this.options)
+      .map(() => null)
+      .catch(this.handleErrorObservable);
   }
 
   // PUT /api/subjects/:subjectObjId/assignments/:assignmentObjId/items/:assignmentItemObjId/
   updateAssignmentItem(subjectObjId: String, assignmentObjId: String, assignmentItem: AssignmentItem){
     const url = `${this.subjectsUrl}/${subjectObjId}/assignments/${assignmentObjId}/items/${assignmentItem._id}`;
     var body = JSON.stringify(assignmentItem);
-    return this.http
-      .put(url, body, this.options)
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+    return this.http.put(url, body, this.options)
+      .map(() => null)
+      .catch(this.handleErrorObservable);
   }
 
   // GET /api/users/:userId/subjects
-  userGetSubjects(id: String): Promise<Subject[]> {
+  userGetSubjects(id: String): Observable<Subject[]> {
     const url = `${this.usersUrl}/${id}/subjects`;
-    return this.http
-      .get(url)
-      .toPromise()
-      .then(response => response.json() as Subject[])
-      .catch(this.handleError);
+    return this.http.get(url)
+      .map(response => this.extractData(response) as Subject[])
+      .catch(this.handleErrorObservable);
   }
 
   // GET /api/users/:userId/subjects/:subjectObjId/assignments/:assignmentObjId
   userGetSubmittedInfo(userId: string, subjectObjId: string, assignmentObjId: string): Observable<SubmittedInfo[]> {
     const url = `${this.usersUrl}/${userId}/subjects/${subjectObjId}/assignments/${assignmentObjId}/files`;
     return this.http.get(url)
-      .map(response => response.json() as SubmittedInfo[])
+      .map(response => this.extractSubmittedInfos(response) as SubmittedInfo[])
       .catch(this.handleErrorObservable)
       .finally(()=>{
         console.log("got");

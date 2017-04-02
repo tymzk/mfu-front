@@ -1,3 +1,4 @@
+/*
 import { Component, OnDestroy, Input } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
@@ -49,3 +50,4 @@ export class AdminAssignmentFormComponent implements OnDestroy {
 		this.subAssignment.unsubscribe();
 	}
 }
+*/

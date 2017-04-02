@@ -22,7 +22,7 @@
     </form>
 
     <div><span>{{ createAssignmentForm.value | json }}</span></div>
-    <div><span>{{ createAssignmentForm.deadline | date: "yyyy-MM-ddThh:mm"}}</span></div>
+    <div><span>{{ createAssignmentForm.value.deadline | date: "yyyy-MM-ddThh:mm"}}</span></div>
 
   </md-card-content>
 </md-card>

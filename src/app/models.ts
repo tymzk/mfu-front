@@ -11,6 +11,7 @@ export class SubmittedInfo implements Serializable<SubmittedInfo> {
   deserialize(input: any): SubmittedInfo{
     this._id         = input._id;
     this.mtime       = new Date(input.mtime);
+    console.log(this.mtime);
     this.size        = input.size;
 
     return this;
@@ -52,6 +53,19 @@ export class Assignment implements Serializable<Assignment> {
   deadline: Date;
 	description: string;
 	items: AssignmentItem[];
+
+  serialize(): string{
+    var val = new Date(this.deadline);
+    var offset = val.getTimezoneOffset() * 60000;
+    var utc = val.getTime() + offset;
+    return JSON.stringify({
+      _id: this._id,
+      public: this.public,
+      deadline: new Date(utc),
+      description: this.description,
+      items: this.items
+    });
+  }
 
   deserialize(input: any): Assignment{
     this._id         = input._id;

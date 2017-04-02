@@ -12,7 +12,7 @@ import { Subject } from '../models';
 })
 
 export class AdminSubjectListComponent implements OnDestroy {
-  private subjects: Subject[];
+  subjects: Subject[];
   selectedSubject: Subject;
   subSubjects: Subscription;
 
