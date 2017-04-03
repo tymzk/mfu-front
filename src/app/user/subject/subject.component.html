@@ -41,7 +41,7 @@
         <md-icon md-list-avatar (click)="onSelectAssignment(assignment)">folder</md-icon>
         <h4 md-line>課題名：{{assignment.name}}</h4>
         <p md-line>説明：{{assignment.description}}<p>
-        <p md-line>締切：{{assignment.deadline}}<p>
+        <p md-line>締切：{{assignment.deadline | date: "yyyy年MM月dd日 hh時mm分"}}<p>
         <button (click)="onSelectAssignment(assignment)" md-raised-button color="primary">詳細</button>
       </md-list-item>
     </md-list>
@@ -61,11 +61,11 @@
             (click)="onSelectAssignmentItem(assignmentItem)"
             [class.selected]="assignmentItem === selectedAssignmentItem">
             <md-icon md-list-avatar>note</md-icon>
-            <h4 md-line>{{assignmentItem.name}}</h4>
-            <p md-line> {{assignmentItem.description}} </p>
-            <p md-line *ngIf="!isSubmittedItem(assignmentItem._id)"> 未提出 </p>
-            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)"> {{printSubmittedFileSize(assignmentItem._id)}} </p>
-            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)"> {{printSubmittedDate(assignmentItem._id) | date: "yyyy-MM-ddThh:mm"}} </p>
+            <h4 md-line>提出フォーム名: {{assignmentItem.name}}</h4>
+            <p md-line>説明: {{assignmentItem.description}} </p>
+            <p md-line *ngIf="!isSubmittedItem(assignmentItem._id)"> 未提出</p>
+            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)">サイズ: {{printSubmittedFileSize(assignmentItem._id)}}バイト</p>
+            <p md-line *ngIf="isSubmittedItem(assignmentItem._id)">提出日時: {{printSubmittedDate(assignmentItem._id) | date: "yyyy年MM月dd日 hh時mm分"}} </p>
             <input type="file" (change)="fileChangeEvent($event)" placeholder="upload"/>
             <button type="button" (click)="upload()">提出</button>
          </md-list-item>

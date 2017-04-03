@@ -1,22 +1,21 @@
 <header class="navbar navbar-default navbar-inverse navbar-fixed-top">
 	<div id="navbar" class="navbar-collapse collpase">
 		<span class="navbar-brand">Minet File Uploader</span>
-		<a class="navbar-brand" *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a>
-		<a class="navbar-brand" *ngIf="authenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">講義</a>
+		<a class="navbar-brand" *ngIf="isAuthenticated" [routerLinkActive]="['active']" [routerLink]="['/']">Home</a>
+		<a class="navbar-brand" *ngIf="isAuthenticated" [routerLinkActive]="['active']" [routerLink]="['/subjects']">講義</a>
 		<span class=" fill-remaining-space"></span>
-		<div *ngIf="administrator">
+		<div *ngIf="isAdministrator">
 			<span class="navbar-brand"> | admin: </span>
 			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/admins']">管理</a>
 			<a class="navbar-brand" [routerLinkActive]="['active']" [routerLink]="['/admin/subjects']">講義</a>
 		</div>
 		<span class="navbar-brand">{{userId}}</span>
-		<a class="navbar-brand" *ngIf="!authenticated" (click)="doLogin()" href="#">Login</a>
-		<a class="navbar-brand" *ngIf="authenticated" (click)="doLogout()" href="#">Logout</a>
+		<a class="navbar-brand" *ngIf="!isAuthenticated" (click)="doLogin()" href="#">Login</a>
+		<a class="navbar-brand" *ngIf="isAuthenticated" (click)="doLogout()" href="#">Logout</a>
 	</div>
 </header>
 
-
-<div *ngIf="authenticated && !allowedDomain" class="alert alert-warning" role="alert">
+<div *ngIf="isAuthenticated && !isAllowedDomain" class="alert alert-warning" role="alert">
 	<p>承認されたドメインではありません。</p>
 	<p>大学のアカウントでログインを行ってください。</p>
 </div>

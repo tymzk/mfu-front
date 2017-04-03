@@ -1,6 +1,7 @@
 import {Injectable, EventEmitter} from "@angular/core";
 import {WindowService} from "./window.service";
 import {Http, Headers} from "@angular/http";
+import { Subject as SubjectRxjs } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -21,6 +22,14 @@ export class AuthService {
   private expiresTimerId: any = null;
   private loopCount = 600;
   private intervalLength = 100;
+
+	private isAuthenticatedSource = new SubjectRxjs<any>();
+
+	isAuthenticated$ = this.isAuthenticatedSource.asObservable();
+
+	setAuthenticated(authenticated: any) {
+		this.isAuthenticatedSource.next(authenticated);
+	}
 
   private locationWatcher = new EventEmitter();
 
@@ -68,11 +77,16 @@ export class AuthService {
               this.startExpiresTimer(expiresSeconds);
               this.expires = new Date();
               this.expires = this.expires.setSeconds(this.expires.getSeconds() + expiresSeconds);
-
               this.windowHandle.close();
               this.emitAuthStatus(true);
               this.fetchUserInfo();
             } else {
+              this.setAuthenticated({
+                  isAuthenticated: false,
+                  isAllowedDomain: false,
+                  userId: null,
+                  userName: null
+                });
               this.authenticated = false;
               this.emitAuthStatus(false);
             }
@@ -90,6 +104,12 @@ export class AuthService {
   }
 
   public doLogout() {
+    this.setAuthenticated({
+        isAuthenticated: false,
+        isAllowedDomain: false,
+        userId: null,
+        userName: null
+      });
     this.authenticated = false;
     this.expiresTimerId = null;
     this.expires = 0;
@@ -121,17 +141,23 @@ export class AuthService {
     }
 
     private fetchUserInfo() {
-        if (this.token != null) {
-            var headers = new Headers();
-            headers.append('Authorization', `Bearer ${this.token}`);
-            this.http.get(this.oAuthUserUrl, {headers: headers})
-                .map(res => res.json())
-                .subscribe(info => {
-                    this.userInfo = info;
-                }, err => {
-                    console.error("Failed to fetch user info:", err);
-                });
-        }
+      if (this.token != null) {
+        var headers = new Headers();
+        headers.append('Authorization', `Bearer ${this.token}`);
+        this.http.get(this.oAuthUserUrl, {headers: headers})
+          .map(res => res.json())
+          .subscribe(info => {
+            this.userInfo = info;
+            this.setAuthenticated({
+                isAuthenticated: true,
+                isAllowedDomain: this.isAllowedDomain(),
+                userId: this.getId(),
+                userName: this.getUserName()
+              });
+          }, err => {
+            console.error("Failed to fetch user info:", err);
+          });
+      }
     }
 
     public getUserInfo() {

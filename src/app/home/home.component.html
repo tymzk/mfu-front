@@ -1,7 +1,10 @@
 
 <md-card>
   <md-card-title>課題提出用サイト</md-card-title>
-  <md-card-content>
-      <p>Please login.</p>
+  <md-card-content *ngIf="!isAuthenticated">
   </md-card-content>
+
+  <md-card-content *ngIf="isAuthenticated">
+  </md-card-content>
+
 </md-card>

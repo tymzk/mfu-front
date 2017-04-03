@@ -1,6 +1,6 @@
 <md-card *ngIf="selectedAssignment">
 
-  <h3 md-subheader>課題「{{selectedAssignment.name}}」の提出フォーム一覧</h3>
+  <h3 md-subheader>課題「{{selectedAssignment?.name}}」の提出フォーム一覧</h3>
 
   <md-card-content>
 
@@ -14,8 +14,9 @@
         (click)="onSelectAssignmentItem(assignmentItem)"
         [class.selected]="assignmentItem === selectedAssignmentItem">
         <md-icon md-list-avatar>note</md-icon>
-        <h4 md-line>{{assignmentItem.name}}</h4>
-        <p md-line> {{assignmentItem.description}} </p>
+        <h4 md-line>提出フォーム名: {{assignmentItem.name}}</h4>
+        <p md-line>説明: {{assignmentItem.description}} </p>
+        <p md-line>保存名: {{assignmentItem.alias}}</p>
       </md-list-item>
     </md-list>
   </md-card-content>

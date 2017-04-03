@@ -93,6 +93,7 @@ export class UserSubjectComponent implements OnInit {
       }
       xhr.open("POST", url, true);
       xhr.send(formData);
+      this.checkSubmitted(this.id, this.selectedSubject._id, this.selectedAssignment._id);
     })
   }
 
@@ -113,10 +114,13 @@ export class UserSubjectComponent implements OnInit {
 
   onSelectSubject(subject: Subject): void {
     this.selectedSubject = subject;
+    this.selectedAssignment = null;
+    this.selectedAssignmentItem = null;
   }
 
   onSelectAssignment(assignment: Assignment): void {
     this.selectedAssignment = assignment;
+    this.selectedAssignmentItem = null;
     this.checkSubmitted(this.id, this.selectedSubject._id, this.selectedAssignment._id);
   }
 

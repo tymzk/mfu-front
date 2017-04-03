@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges } from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import { ApiService } from "../services/api.service";
+import { Subscription } from 'rxjs';
 
 import { Router} from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -10,40 +12,46 @@ import { Router} from '@angular/router';
 })
 
 export class NavbarComponent {
-	private isAdmin: boolean;
+	isAuthenticated: boolean;
+	isAllowedDomain: boolean;
+	isAdministrator: boolean;
+
+	userId: string;
+	userName: string;
+
+  subIsAuthenticated: Subscription;
 
 	constructor(
 		private apiService: ApiService,
 		private authService: AuthService,
 		public router : Router) {
-		this.isAdmin = false;
-	}
+		this.isAdministrator = false;
 
-	get administrator(): boolean{
-		return this.authService.isAuthenticated() && true;
-	}
-
-	get authenticated(): boolean{
-		return this.authService.isAuthenticated();
+    this.subIsAuthenticated = this.authService.isAuthenticated$.subscribe(
+      (userInfo) => {
+        this.isAuthenticated = userInfo.isAuthenticated;
+				this.isAllowedDomain = userInfo.isAllowedDomain;
+				this.userId = userInfo.userId;
+				this.userName = userInfo.name;
+				if(this.isAuthenticated && this.isAllowedDomain && this.userId){
+					this.apiService.isAdministrator(this.userId).subscribe(
+						isAdmin => {
+							this.isAdministrator = isAdmin;
+						}
+					);
+				}else{
+					this.isAdministrator = false;
+				}
+      }
+    );
 	}
 
 	doLogin() {
 		this.authService.doLogin();
 	}
 
-	get allowedDomain(): boolean{
-		return this.authService.isAllowedDomain();
-	}
-
 	doLogout() {
 		this.authService.doLogout();
 		this.router.navigateByUrl('/');
-	}
-	get userId() {
-    return this.authService.getId();
-	}
-
-	get userName() {
-		return this.authService.getUserName();
 	}
 }
