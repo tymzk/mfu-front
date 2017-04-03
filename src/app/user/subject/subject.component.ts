@@ -42,6 +42,7 @@ export class UserSubjectComponent implements OnInit {
 
 
   upload() {
+//    this.makeFileRequest('http://localhost.co.jp:3001/upload',[],this.filesToUpload)
     this.makeFileRequest('http://localhost.co.jp:3001/upload',[],this.filesToUpload)
       .then(
         (result) => {
